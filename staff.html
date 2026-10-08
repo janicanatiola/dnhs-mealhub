@@ -40,18 +40,19 @@
     <h2>👩‍💼 Staff Login</h2>
 
     <p>
-        Authorized canteen staff can manage
+        Authorized DepEd staff can manage
         orders and food availability here.
     </p>
 
     <div class="notice">
-        Demo login: use <strong>staff@dnhs.demo</strong>
+        Please use your official
+        <strong>@deped.gov.ph</strong> email address.
     </div>
 
     <input
         id="staffEmail"
         type="email"
-        placeholder="Enter staff email"
+        placeholder="Enter DepEd email"
     >
 
     <br><br>
@@ -121,9 +122,60 @@
 <script>
 
 
-const whitelist = [
-    "staff@dnhs.demo"
-];
+function isAuthorizedEmail(email) {
+
+    return email
+        .toLowerCase()
+        .endsWith("@deped.gov.ph");
+
+}
+
+
+function loginStaff() {
+
+    const email =
+        document.getElementById(
+            "staffEmail"
+        ).value.trim().toLowerCase();
+
+
+    if(!email) {
+
+        alert(
+            "Please enter your email address."
+        );
+
+        return;
+
+    }
+
+
+    if(!isAuthorizedEmail(email)) {
+
+        alert(
+            "Access denied. Please use an authorized DepEd email ending in @deped.gov.ph."
+        );
+
+        return;
+
+    }
+
+
+    localStorage.setItem(
+        "staffLoggedIn",
+        "true"
+    );
+
+
+    localStorage.setItem(
+        "staffEmail",
+        email
+    );
+
+
+    showDashboard();
+
+}
 
 
 const foods = [
@@ -177,36 +229,6 @@ const foods = [
     }
 
 ];
-
-
-function loginStaff() {
-
-    const email =
-        document.getElementById(
-            "staffEmail"
-        ).value.trim().toLowerCase();
-
-
-    if(!whitelist.includes(email)) {
-
-        alert(
-            "Access denied. This email is not authorized."
-        );
-
-        return;
-
-    }
-
-
-    localStorage.setItem(
-        "staffLoggedIn",
-        "true"
-    );
-
-
-    showDashboard();
-
-}
 
 
 function showDashboard() {
@@ -285,6 +307,12 @@ function displayOrders() {
                     </p>
 
                     <p>
+                        🏫 ${order.grade}
+                        <br>
+                        📚 ${order.section}
+                    </p>
+
+                    <p>
                         ${items}
                     </p>
 
@@ -300,11 +328,7 @@ function displayOrders() {
                         ${
                             order.method === "delivery"
 
-                            ? `
-                                🚚 Delivery<br>
-                                Grade: ${order.grade}<br>
-                                Section: ${order.section}
-                            `
+                            ? "🚚 Delivery"
 
                             : "🏃 Pickup"
 

@@ -58,8 +58,8 @@
             <h2>Order Details</h2>
 
             <div class="notice">
-                Please enter your information so the canteen
-                knows where to send your order.
+                Enter your student information so the canteen
+                knows who the order belongs to.
             </div>
 
 
@@ -70,7 +70,33 @@
                 <input
                     id="name"
                     type="text"
-                    placeholder="Enter your name"
+                    placeholder="Enter your full name"
+                >
+
+            </div>
+
+
+            <div class="form-group">
+
+                <label>Grade</label>
+
+                <input
+                    id="grade"
+                    type="text"
+                    placeholder="Example: Grade 10"
+                >
+
+            </div>
+
+
+            <div class="form-group">
+
+                <label>Section</label>
+
+                <input
+                    id="section"
+                    type="text"
+                    placeholder="Example: Flores"
                 >
 
             </div>
@@ -89,7 +115,6 @@
                             name="method"
                             value="pickup"
                             checked
-                            onchange="toggleDelivery()"
                         >
 
                         🏃 Pickup
@@ -103,43 +128,11 @@
                             type="radio"
                             name="method"
                             value="delivery"
-                            onchange="toggleDelivery()"
                         >
 
                         🚚 Delivery
 
                     </label>
-
-                </div>
-
-            </div>
-
-
-            <div id="deliveryFields"
-                style="display:none;">
-
-                <div class="form-group">
-
-                    <label>Grade</label>
-
-                    <input
-                        id="grade"
-                        type="text"
-                        placeholder="Example: Grade 10"
-                    >
-
-                </div>
-
-
-                <div class="form-group">
-
-                    <label>Section</label>
-
-                    <input
-                        id="section"
-                        type="text"
-                        placeholder="Example: Rizal"
-                    >
 
                 </div>
 
@@ -224,11 +217,13 @@ function displayCart() {
                 </a>
 
             </div>
+
         `;
 
         totalBox.innerHTML = "";
 
         return;
+
     }
 
 
@@ -346,30 +341,16 @@ function removeItem(index) {
 }
 
 
-function toggleDelivery() {
-
-    const method =
-        document.querySelector(
-            'input[name="method"]:checked'
-        ).value;
-
-    document.getElementById(
-        "deliveryFields"
-    ).style.display =
-        method === "delivery"
-        ? "block"
-        : "none";
-
-}
-
-
 function placeOrder() {
 
     const cart = getCart();
 
     if(cart.length === 0) {
+
         alert("Your cart is empty.");
+
         return;
+
     }
 
 
@@ -378,9 +359,24 @@ function placeOrder() {
         .value.trim();
 
 
-    if(!name) {
-        alert("Please enter your name.");
+    const grade =
+        document.getElementById("grade")
+        .value.trim();
+
+
+    const section =
+        document.getElementById("section")
+        .value.trim();
+
+
+    if(!name || !grade || !section) {
+
+        alert(
+            "Please enter your name, grade, and section."
+        );
+
         return;
+
     }
 
 
@@ -388,33 +384,6 @@ function placeOrder() {
         document.querySelector(
             'input[name="method"]:checked'
         ).value;
-
-
-    let grade = "";
-    let section = "";
-
-
-    if(method === "delivery") {
-
-        grade =
-            document.getElementById("grade")
-            .value.trim();
-
-        section =
-            document.getElementById("section")
-            .value.trim();
-
-
-        if(!grade || !section) {
-
-            alert(
-                "Please enter your grade and section."
-            );
-
-            return;
-        }
-
-    }
 
 
     const total =
