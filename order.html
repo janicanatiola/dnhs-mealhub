@@ -2,32 +2,67 @@
 <html lang="en">
 
 <head>
+
     <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+
+    <meta
+        name="viewport"
+        content="width=device-width, initial-scale=1.0"
+    >
+
     <title>Order Status - DNHS MealHub</title>
-    <link rel="stylesheet" href="style.css">
+
+    <link
+        rel="stylesheet"
+        href="style.css"
+    >
+
 </head>
 
 <body>
 
 <header>
+
     <nav class="navbar">
 
-        <a href="index.html" class="logo">
-            <div class="logo-icon">🍱</div>
-            <div>
-                <h1>DNHS MealHub</h1>
-                <span>Order Status</span>
-            </div>
+        <a
+            href="index.html"
+            class="logo"
+        >
+
+            <img
+                src="logo.png"
+                alt="DNHS MealHub Logo"
+            >
+
         </a>
 
+
         <div class="nav-links">
-            <a href="index.html">Home</a>
-            <a href="menu.html">Menu</a>
-            <a href="cart.html" class="nav-cart">🛒 Cart</a>
+
+            <a href="index.html">
+                Home
+            </a>
+
+            <a href="menu.html">
+                Menu
+            </a>
+
+            <a
+                href="cart.html"
+                class="nav-cart"
+            >
+                🛒 Cart
+            </a>
+
+            <a href="staff.html">
+                👤 Staff
+            </a>
+
         </div>
 
     </nav>
+
 </header>
 
 
@@ -39,8 +74,13 @@
 
 
 <footer>
-    <div class="footer-title">🍱 DNHS MealHub</div>
+
+    <div class="footer-title">
+        🍱 DNHS MealHub
+    </div>
+
     Dayap National High School
+
 </footer>
 
 
@@ -53,8 +93,11 @@ function getOrder() {
             window.location.search
         );
 
+
     const id =
-        Number(params.get("id"));
+        Number(
+            params.get("id")
+        );
 
 
     const orders =
@@ -64,7 +107,8 @@ function getOrder() {
 
 
     return orders.find(
-        order => order.id === id
+        order =>
+            order.id === id
     );
 
 }
@@ -74,26 +118,28 @@ function displayOrder() {
 
     const order = getOrder();
 
+
     const container =
         document.getElementById(
             "orderContainer"
         );
 
 
-    if(!order) {
+    if (!order) {
 
         container.innerHTML = `
 
             <div class="card">
 
-                <h2>Order not found 😢</h2>
+                <h2>
+                    Order not found 😢
+                </h2>
 
                 <a
                     href="menu.html"
-                    class="primary-btn">
-
+                    class="primary-btn"
+                >
                     Back to Menu
-
                 </a>
 
             </div>
@@ -106,46 +152,60 @@ function displayOrder() {
 
 
     const statusOrder = [
+
         "Pending",
         "Preparing",
         "Ready",
         "Completed"
+
     ];
 
 
     const currentIndex =
-        statusOrder.indexOf(order.status);
+        statusOrder.indexOf(
+            order.status
+        );
 
 
     const steps =
-        statusOrder.map(
-            (status,index) => `
+        statusOrder
+            .map(
+                (status, index) => `
 
-                <div class="status-step ${
-                    index <= currentIndex
-                    ? "active"
-                    : ""
-                }">
+                    <div
+                        class="status-step ${
+                            index <= currentIndex
+                                ? "active"
+                                : ""
+                        }"
+                    >
 
-                    <div class="status-circle">
-                        ${index + 1}
+                        <div
+                            class="status-circle"
+                        >
+                            ${index + 1}
+                        </div>
+
+                        <p>
+                            ${status}
+                        </p>
+
                     </div>
 
-                    <p>${status}</p>
-
-                </div>
-
-            `
-        ).join("");
+                `
+            )
+            .join("");
 
 
     const items =
         order.items
-        .map(
-            item =>
-            `${item.emoji} ${item.name} × ${item.quantity}`
-        )
-        .join("<br>");
+            .map(
+                item =>
+                    `${item.emoji}
+                    ${item.name}
+                    × ${item.quantity}`
+            )
+            .join("<br>");
 
 
     container.innerHTML = `
@@ -156,9 +216,14 @@ function displayOrder() {
                 🎉 Order received!
             </h2>
 
+
             <p>
-                Thank you, <strong>${order.name}</strong>!
+                Thank you,
+                <strong>
+                    ${order.name}
+                </strong>!
             </p>
+
 
             <p class="order-number">
                 Order #${order.id}
@@ -166,23 +231,34 @@ function displayOrder() {
 
 
             <div class="status-track">
+
                 ${steps}
+
             </div>
 
 
             <p>
-                <strong>Current Status:</strong><br><br>
+
+                <strong>
+                    Current Status:
+                </strong>
+
+                <br><br>
 
                 <span class="order-status">
                     ${order.status}
                 </span>
+
             </p>
 
 
             <hr>
 
 
-            <h3>Your Items</h3>
+            <h3>
+                Your Items
+            </h3>
+
 
             <p>
                 ${items}
@@ -190,54 +266,64 @@ function displayOrder() {
 
 
             <h3>
+
                 Total:
-                <span style="color:#1769c2;">
+
+                <span
+                    style="color:#ff9f1c;"
+                >
                     ₱${order.total}
                 </span>
+
             </h3>
 
 
             <p>
 
-                <strong>Receiving Method:</strong>
+                <strong>
+                    Student Information:
+                </strong>
+
+                <br>
+
+                Name:
+                ${order.name}
+
+                <br>
+
+                Grade:
+                ${order.grade}
+
+                <br>
+
+                Section:
+                ${order.section}
+
+            </p>
+
+
+            <p>
+
+                <strong>
+                    Receiving Method:
+                </strong>
 
                 ${
                     order.method === "delivery"
-                    ? "🚚 Delivery"
-                    : "🏃 Pickup"
+                        ? "🚚 Delivery"
+                        : "🏃 Pickup"
                 }
 
             </p>
 
 
-            ${
-                order.method === "delivery"
-
-                ? `
-
-                    <p>
-
-                        <strong>Grade:</strong>
-                        ${order.grade}
-
-                        <br>
-
-                        <strong>Section:</strong>
-                        ${order.section}
-
-                    </p>
-
-                `
-
-                : ""
-            }
-
-
             <br>
+
 
             <a
                 href="menu.html"
-                class="primary-btn">
+                class="primary-btn"
+            >
 
                 Order More 🍔
 
@@ -254,8 +340,10 @@ function updateStatus() {
 
     const order = getOrder();
 
-    if(order) {
+    if (order) {
+
         displayOrder();
+
     }
 
 }
@@ -263,7 +351,10 @@ function updateStatus() {
 
 displayOrder();
 
-setInterval(updateStatus,1000);
+setInterval(
+    updateStatus,
+    1000
+);
 
 </script>
 

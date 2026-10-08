@@ -2,41 +2,83 @@
 <html lang="en">
 
 <head>
+
     <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+
+    <meta
+        name="viewport"
+        content="width=device-width, initial-scale=1.0"
+    >
+
     <title>Menu - DNHS MealHub</title>
-    <link rel="stylesheet" href="style.css">
+
+    <link
+        rel="stylesheet"
+        href="style.css"
+    >
+
 </head>
 
 <body>
 
 <header>
+
     <nav class="navbar">
 
-        <a href="index.html" class="logo">
-            <div class="logo-icon">🍱</div>
-            <div>
-                <h1>DNHS MealHub</h1>
-                <span>Today's Canteen Menu</span>
-            </div>
+        <a
+            href="index.html"
+            class="logo"
+        >
+
+            <img
+                src="logo.png"
+                alt="DNHS MealHub Logo"
+            >
+
         </a>
 
         <div class="nav-links">
-            <a href="index.html">Home</a>
-            <a href="menu.html">Menu</a>
-            <a href="cart.html" class="nav-cart">🛒 Cart</a>
-            <a href="staff.html">Staff</a>
+
+            <a href="index.html">
+                Home
+            </a>
+
+            <a href="menu.html">
+                Menu
+            </a>
+
+            <a
+                href="cart.html"
+                class="nav-cart"
+            >
+                🛒 Cart
+            </a>
+
+            <a href="staff.html">
+                👤 Staff
+            </a>
+
         </div>
 
     </nav>
+
 </header>
+
 
 <main class="container">
 
     <div class="page-title">
-        <h2>🍴 Today's Menu</h2>
-        <p>Choose what you want from the DNHS canteen.</p>
+
+        <h2>
+            🍴 Today's Menu
+        </h2>
+
+        <p>
+            Choose what you want from the DNHS canteen.
+        </p>
+
     </div>
+
 
     <div class="menu-toolbar">
 
@@ -50,23 +92,31 @@
 
         <div class="category-row">
 
-            <button class="category-btn active"
-                onclick="setCategory('All',this)">
+            <button
+                class="category-btn active"
+                onclick="setCategory('All',this)"
+            >
                 All
             </button>
 
-            <button class="category-btn"
-                onclick="setCategory('Meals',this)">
+            <button
+                class="category-btn"
+                onclick="setCategory('Meals',this)"
+            >
                 🍱 Meals
             </button>
 
-            <button class="category-btn"
-                onclick="setCategory('Snacks',this)">
+            <button
+                class="category-btn"
+                onclick="setCategory('Snacks',this)"
+            >
                 🍟 Snacks
             </button>
 
-            <button class="category-btn"
-                onclick="setCategory('Drinks',this)">
+            <button
+                class="category-btn"
+                onclick="setCategory('Drinks',this)"
+            >
                 🥤 Drinks
             </button>
 
@@ -74,13 +124,23 @@
 
     </div>
 
-    <div id="foodGrid" class="food-grid"></div>
+
+    <div
+        id="foodGrid"
+        class="food-grid"
+    ></div>
 
 </main>
 
+
 <footer>
-    <div class="footer-title">🍱 DNHS MealHub</div>
+
+    <div class="footer-title">
+        🍱 DNHS MealHub
+    </div>
+
     Dayap National High School
+
 </footer>
 
 
@@ -89,86 +149,89 @@
 const foods = [
 
     {
-        id:1,
-        name:"Chicken Sandwich",
-        price:35,
-        emoji:"🥪",
-        category:"Snacks",
-        description:"Soft bread with tasty chicken filling."
+        id: 1,
+        name: "Chicken Sandwich",
+        price: 35,
+        emoji: "🥪",
+        category: "Snacks",
+        description: "Soft bread with tasty chicken filling."
     },
 
     {
-        id:2,
-        name:"Pancit",
-        price:30,
-        emoji:"🍜",
-        category:"Meals",
-        description:"Savory noodles perfect for a quick lunch."
+        id: 2,
+        name: "Pancit",
+        price: 30,
+        emoji: "🍜",
+        category: "Meals",
+        description: "Savory noodles perfect for a quick lunch."
     },
 
     {
-        id:3,
-        name:"Fried Chicken",
-        price:45,
-        emoji:"🍗",
-        category:"Meals",
-        description:"Crispy fried chicken and a filling meal."
+        id: 3,
+        name: "Fried Chicken",
+        price: 45,
+        emoji: "🍗",
+        category: "Meals",
+        description: "Crispy fried chicken and a filling meal."
     },
 
     {
-        id:4,
-        name:"Classic Burger",
-        price:40,
-        emoji:"🍔",
-        category:"Meals",
-        description:"A classic burger for a quick lunch."
+        id: 4,
+        name: "Classic Burger",
+        price: 40,
+        emoji: "🍔",
+        category: "Meals",
+        description: "A classic burger for a quick lunch."
     },
 
     {
-        id:5,
-        name:"French Fries",
-        price:25,
-        emoji:"🍟",
-        category:"Snacks",
-        description:"Crispy fries for a tasty snack."
+        id: 5,
+        name: "French Fries",
+        price: 25,
+        emoji: "🍟",
+        category: "Snacks",
+        description: "Crispy fries for a tasty snack."
     },
 
     {
-        id:6,
-        name:"Iced Tea",
-        price:20,
-        emoji:"🥤",
-        category:"Drinks",
-        description:"A cool and refreshing drink."
+        id: 6,
+        name: "Iced Tea",
+        price: 20,
+        emoji: "🥤",
+        category: "Drinks",
+        description: "A cool and refreshing drink."
     },
 
     {
-        id:7,
-        name:"Hotdog Sandwich",
-        price:30,
-        emoji:"🌭",
-        category:"Snacks",
-        description:"A tasty hotdog in soft bread."
+        id: 7,
+        name: "Hotdog Sandwich",
+        price: 30,
+        emoji: "🌭",
+        category: "Snacks",
+        description: "A tasty hotdog in soft bread."
     },
 
     {
-        id:8,
-        name:"Rice Meal",
-        price:50,
-        emoji:"🍛",
-        category:"Meals",
-        description:"A filling rice meal for hungry students."
+        id: 8,
+        name: "Rice Meal",
+        price: 50,
+        emoji: "🍛",
+        category: "Meals",
+        description: "A filling rice meal for hungry students."
     }
 
 ];
+
 
 let selectedCategory = "All";
 
 
 function getStock() {
+
     return JSON.parse(
         localStorage.getItem("foodStock")
     ) || {};
+
 }
 
 
@@ -178,11 +241,14 @@ function setCategory(category, button) {
 
     document
         .querySelectorAll(".category-btn")
-        .forEach(btn => btn.classList.remove("active"));
+        .forEach(btn =>
+            btn.classList.remove("active")
+        );
 
     button.classList.add("active");
 
     displayFoods();
+
 }
 
 
@@ -193,102 +259,136 @@ function displayFoods() {
 
     const search =
         document
-        .getElementById("search")
-        .value
-        .toLowerCase();
+            .getElementById("search")
+            .value
+            .toLowerCase();
 
     const stock = getStock();
+
 
     const filtered = foods.filter(food => {
 
         const matchesSearch =
-            food.name.toLowerCase().includes(search);
+            food.name
+                .toLowerCase()
+                .includes(search);
 
         const matchesCategory =
             selectedCategory === "All" ||
             food.category === selectedCategory;
 
-        return matchesSearch && matchesCategory;
+        return matchesSearch &&
+            matchesCategory;
+
     });
 
 
-    if(filtered.length === 0) {
+    if (filtered.length === 0) {
 
         grid.innerHTML = `
+
             <div class="card">
-                <h2>No food found 😢</h2>
-                <p>Try another search.</p>
+
+                <h2>
+                    No food found 😢
+                </h2>
+
+                <p>
+                    Try another search.
+                </p>
+
             </div>
+
         `;
 
         return;
+
     }
 
 
-    grid.innerHTML = filtered.map(food => {
+    grid.innerHTML =
+        filtered.map(food => {
 
-        const available =
-            stock[food.id] !== false;
+            const available =
+                stock[food.id] !== false;
 
-        return `
 
-            <div class="food-card">
+            return `
 
-                <div class="food-visual">
+                <div class="food-card">
 
-                    <span class="food-tag">
-                        ${food.category}
-                    </span>
+                    <div class="food-visual">
 
-                    ${food.emoji}
-
-                </div>
-
-                <div class="food-info">
-
-                    <h3>${food.name}</h3>
-
-                    <p class="food-description">
-                        ${food.description}
-                    </p>
-
-                    <span class="status ${
-                        available
-                        ? "available"
-                        : "sold-out"
-                    }">
-                        ${
-                            available
-                            ? "Available"
-                            : "Sold Out"
-                        }
-                    </span>
-
-                    <div class="food-bottom">
-
-                        <span class="price">
-                            ₱${food.price}
+                        <span class="food-tag">
+                            ${food.category}
                         </span>
 
-                        <button
-                            class="add-btn"
-                            ${available ? "" : "disabled"}
-                            onclick="addToCart(${food.id})">
+                        ${food.emoji}
 
-                            ${available
-                                ? "Add +"
-                                : "Sold Out"}
+                    </div>
 
-                        </button>
+
+                    <div class="food-info">
+
+                        <h3>
+                            ${food.name}
+                        </h3>
+
+                        <p class="food-description">
+                            ${food.description}
+                        </p>
+
+
+                        <span class="status ${
+                            available
+                                ? "available"
+                                : "sold-out"
+                        }">
+
+                            ${
+                                available
+                                    ? "Available"
+                                    : "Sold Out"
+                            }
+
+                        </span>
+
+
+                        <div class="food-bottom">
+
+                            <span class="price">
+                                ₱${food.price}
+                            </span>
+
+
+                            <button
+                                class="add-btn"
+                                ${
+                                    available
+                                        ? ""
+                                        : "disabled"
+                                }
+                                onclick="addToCart(${food.id})"
+                            >
+
+                                ${
+                                    available
+                                        ? "Add +"
+                                        : "Sold Out"
+                                }
+
+                            </button>
+
+                        </div>
 
                     </div>
 
                 </div>
 
-            </div>
-        `;
+            `;
 
-    }).join("");
+        }).join("");
+
 }
 
 
@@ -299,30 +399,49 @@ function addToCart(id) {
             localStorage.getItem("cart")
         ) || [];
 
+
     const food =
-        foods.find(item => item.id === id);
+        foods.find(
+            item => item.id === id
+        );
+
 
     const existing =
-        cart.find(item => item.id === id);
+        cart.find(
+            item => item.id === id
+        );
 
-    if(existing) {
+
+    if (existing) {
+
         existing.quantity++;
+
     } else {
+
         cart.push({
+
             id: food.id,
             name: food.name,
             price: food.price,
             emoji: food.emoji,
             quantity: 1
+
         });
+
     }
+
 
     localStorage.setItem(
         "cart",
         JSON.stringify(cart)
     );
 
-    alert(food.name + " added to cart! 🛒");
+
+    alert(
+        food.name +
+        " added to cart! 🛒"
+    );
+
 }
 
 
