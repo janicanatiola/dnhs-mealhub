@@ -10,14 +10,19 @@
     --mint: #d9f4c7;
     --cream: #fffaf0;
     --coral: #ff6b4a;
-    --purple: #8b6cff;
     --blue: #4aa3df;
     --text: #183522;
     --gray: #637267;
     --white: #ffffff;
+    --red: #d94a4a;
 
     --shadow: 0 12px 30px rgba(31, 74, 45, 0.12);
 }
+
+
+/* ================================
+   GENERAL
+================================ */
 
 html {
     scroll-behavior: smooth;
@@ -27,6 +32,8 @@ body {
     margin: 0;
     font-family: Arial, sans-serif;
     color: var(--text);
+    min-height: 100vh;
+    overflow-x: hidden;
 
     background:
         radial-gradient(
@@ -50,8 +57,6 @@ body {
             #fff4c7 48%,
             #eaf7d9 100%
         );
-
-    min-height: 100vh;
 }
 
 a {
@@ -59,16 +64,16 @@ a {
     color: inherit;
 }
 
-/* =========================
+
+/* ================================
    HEADER
-========================= */
+================================ */
 
 header {
     background: rgba(255, 253, 245, .96);
     backdrop-filter: blur(14px);
 
-    border-bottom:
-        3px solid rgba(255, 159, 28, .25);
+    border-bottom: 3px solid rgba(255, 159, 28, .25);
 
     position: sticky;
     top: 0;
@@ -103,31 +108,6 @@ header {
     display: block;
 }
 
-.logo-icon {
-    width: 48px;
-    height: 48px;
-
-    background: var(--orange);
-    color: white;
-
-    border-radius: 15px;
-
-    display: flex;
-    align-items: center;
-    justify-content: center;
-
-    font-size: 26px;
-}
-
-.logo h1 {
-    margin: 0;
-    color: var(--green);
-}
-
-.logo span {
-    color: var(--gray);
-}
-
 .nav-links {
     display: flex;
     align-items: center;
@@ -160,20 +140,21 @@ header {
         0 6px 15px rgba(255, 159, 28, .25);
 }
 
-/* =========================
-   MAIN CONTAINER
-========================= */
+
+/* ================================
+   CONTAINER
+================================ */
 
 .container {
     width: 92%;
     max-width: 1200px;
-
     margin: 35px auto;
 }
 
-/* =========================
+
+/* ================================
    HERO
-========================= */
+================================ */
 
 .hero {
     position: relative;
@@ -262,7 +243,8 @@ header {
     font-size: 13px;
     font-weight: bold;
 
-    box-shadow: 0 6px 18px rgba(0,0,0,.07);
+    box-shadow:
+        0 6px 18px rgba(0,0,0,.07);
 }
 
 .hero h2 {
@@ -313,9 +295,10 @@ header {
         drop-shadow(0 15px 15px rgba(0,0,0,.13));
 }
 
-/* =========================
+
+/* ================================
    BUTTONS
-========================= */
+================================ */
 
 .primary-btn,
 .secondary-btn,
@@ -346,7 +329,6 @@ header {
 
 .primary-btn:hover {
     background: var(--dark-green);
-
     transform: translateY(-2px);
 }
 
@@ -367,9 +349,10 @@ header {
     color: white;
 }
 
-/* =========================
+
+/* ================================
    SECTIONS
-========================= */
+================================ */
 
 .section {
     margin-top: 48px;
@@ -397,9 +380,10 @@ header {
     color: var(--gray);
 }
 
-/* =========================
+
+/* ================================
    FEATURE CARDS
-========================= */
+================================ */
 
 .feature-grid {
     display: grid;
@@ -487,9 +471,10 @@ header {
     line-height: 1.5;
 }
 
-/* =========================
+
+/* ================================
    FOOD
-========================= */
+================================ */
 
 .food-grid {
     display: grid;
@@ -629,9 +614,10 @@ header {
     background: #aaa;
 }
 
-/* =========================
+
+/* ================================
    STATUS
-========================= */
+================================ */
 
 .status {
     display: inline-block;
@@ -646,7 +632,7 @@ header {
 }
 
 .available {
-    background: #d9f3df;
+    background: #d9f7df;
     color: #137c49;
 }
 
@@ -655,9 +641,10 @@ header {
     color: #c52f2f;
 }
 
-/* =========================
-   PAGE TITLES
-========================= */
+
+/* ================================
+   PAGE TITLE
+================================ */
 
 .page-title {
     position: relative;
@@ -696,9 +683,10 @@ header {
     color: var(--gray);
 }
 
-/* =========================
-   MENU TOOLBAR
-========================= */
+
+/* ================================
+   MENU
+================================ */
 
 .menu-toolbar {
     background: rgba(255,255,255,.95);
@@ -771,9 +759,10 @@ select:focus {
     color: white;
 }
 
-/* =========================
-   GENERAL CARDS
-========================= */
+
+/* ================================
+   CARDS
+================================ */
 
 .card,
 .order-card {
@@ -786,9 +775,10 @@ select:focus {
     padding: 24px;
 }
 
-/* =========================
+
+/* ================================
    CART
-========================= */
+================================ */
 
 .cart-layout {
     display: grid;
@@ -869,6 +859,8 @@ select:focus {
     border-radius: 8px;
 
     font-weight: bold;
+
+    cursor: pointer;
 }
 
 .total-box {
@@ -933,9 +925,10 @@ select:focus {
     width: auto;
 }
 
-/* =========================
+
+/* ================================
    EMPTY
-========================= */
+================================ */
 
 .empty-state {
     text-align: center;
@@ -947,9 +940,10 @@ select:focus {
     font-size: 65px;
 }
 
-/* =========================
+
+/* ================================
    ORDER
-========================= */
+================================ */
 
 .order-number {
     color: var(--orange);
@@ -1012,9 +1006,10 @@ select:focus {
     color: white;
 }
 
-/* =========================
+
+/* ================================
    STAFF
-========================= */
+================================ */
 
 .dashboard-grid {
     display: grid;
@@ -1109,9 +1104,10 @@ select:focus {
     color: #c52f2f;
 }
 
-/* =========================
+
+/* ================================
    NOTICE
-========================= */
+================================ */
 
 .notice {
     background:
@@ -1133,9 +1129,10 @@ select:focus {
     font-size: 13px;
 }
 
-/* =========================
+
+/* ================================
    FOOTER
-========================= */
+================================ */
 
 footer {
     margin-top: 55px;
@@ -1163,24 +1160,27 @@ footer {
     margin-bottom: 7px;
 }
 
-/* =========================
-   MOBILE
-========================= */
 
-@media(max-width:850px) {
+/* ==================================================
+   TABLET
+================================================== */
+
+@media (max-width: 850px) {
 
     .navbar {
         flex-direction: column;
 
         padding: 15px 0;
+
+        gap: 12px;
     }
 
-    .logo img {
-        width: 170px;
+    .logo {
+        justify-content: center;
     }
 
     .hero {
-        padding: 40px;
+        padding: 45px;
     }
 
     .hero-content {
@@ -1191,50 +1191,21 @@ footer {
         opacity: .13;
     }
 
-    .feature-grid,
+    .feature-grid {
+        grid-template-columns:
+            repeat(2, 1fr);
+    }
+
     .dashboard-grid,
     .cart-layout {
         grid-template-columns: 1fr;
     }
 }
 
-@media(max-width:600px) {
 
-    .hero {
-        padding: 30px;
-    }
-
-    .hero h2 {
-        font-size: 40px;
-    }
-
-    .food-grid,
-    .feature-grid {
-        grid-template-columns: 1fr;
-    }
-
-    .delivery-choice {
-        grid-template-columns: 1fr;
-    }
-
-    .cart-item {
-        grid-template-columns:
-            50px 1fr;
-    }
-
-    .cart-item > :last-child {
-        grid-column: 2;
-    }
-
-    .nav-links {
-        justify-content: center;
-    }
-
-}
-
-/* ================================
-   MOBILE / PHONE OPTIMIZATION
-   ================================ */
+/* ==================================================
+   PHONE
+================================================== */
 
 @media (max-width: 700px) {
 
@@ -1242,144 +1213,177 @@ footer {
         overflow-x: hidden;
     }
 
-    .container {
-        width: 94%;
-        margin: 20px auto;
-    }
 
     /* HEADER */
 
     header {
-        padding: 12px 4%;
+        padding: 10px 3%;
     }
 
     .navbar {
         width: 100%;
+
         flex-direction: column;
+
         align-items: center;
-        gap: 12px;
+
+        gap: 10px;
+
+        min-height: auto;
     }
 
     .logo {
         width: 100%;
+
         justify-content: center;
-        text-align: center;
     }
 
-    .logo-icon {
-        width: 42px;
-        height: 42px;
-        font-size: 23px;
-    }
-
-    .logo h1 {
-        font-size: 20px;
-    }
-
-    .logo span {
-        font-size: 10px;
+    .logo img {
+        width: 165px;
+        max-width: 80%;
     }
 
     .nav-links {
         width: 100%;
+
         justify-content: center;
-        gap: 5px;
+
+        gap: 4px;
     }
 
     .nav-links a {
-        padding: 8px 10px;
-        font-size: 13px;
+        padding: 8px 9px;
+
+        font-size: 12px;
+
+        border-radius: 10px;
     }
+
+
+    /* MAIN */
+
+    .container {
+        width: 94%;
+
+        margin: 20px auto;
+    }
+
 
     /* HERO */
 
     .hero {
-        min-height: 360px;
-        padding: 30px 24px;
+        min-height: 390px;
+
+        padding: 30px 23px;
+
         border-radius: 24px;
+
+        align-items: flex-start;
     }
 
     .hero-content {
         width: 100%;
     }
 
+    .hero-badge {
+        font-size: 11px;
+
+        padding: 8px 11px;
+    }
+
     .hero h2 {
         font-size: 40px;
+
         line-height: 1.05;
+
+        margin: 15px 0;
     }
 
     .hero p {
         font-size: 15px;
-        line-height: 1.5;
-    }
 
-    .hero-food {
-        right: -20px;
-        bottom: 10px;
-        font-size: 100px;
-        opacity: .15;
+        line-height: 1.5;
+
+        max-width: 100%;
     }
 
     .hero-buttons {
         flex-direction: column;
+
+        width: 100%;
+
+        gap: 9px;
     }
 
     .hero-buttons a {
         width: 100%;
+
         text-align: center;
     }
 
-    /* PAGE TITLE */
+    .hero-food {
+        right: -20px;
 
-    .page-title {
-        padding: 25px 20px;
-        border-radius: 20px;
+        bottom: 5px;
+
+        font-size: 105px;
+
+        opacity: .13;
     }
 
-    .page-title h2 {
-        font-size: 28px;
-    }
 
-    .page-title p {
-        font-size: 14px;
-        line-height: 1.5;
-    }
-
-    /* SECTION */
+    /* SECTIONS */
 
     .section {
-        margin-top: 28px;
+        margin-top: 30px;
     }
 
     .section-heading {
-        align-items: flex-start;
-        gap: 12px;
         flex-direction: column;
+
+        align-items: flex-start;
+
+        gap: 10px;
     }
 
     .section-heading h2 {
-        font-size: 24px;
+        font-size: 25px;
     }
 
     .section-heading p {
         font-size: 14px;
+
+        margin-top: 5px;
     }
+
 
     /* FEATURE CARDS */
 
     .feature-grid {
         grid-template-columns: 1fr;
-        gap: 14px;
+
+        gap: 13px;
     }
 
     .feature-card {
         padding: 20px;
+
+        border-radius: 18px;
     }
 
-    /* FOOD */
+    .feature-icon {
+        width: 55px;
+        height: 55px;
+
+        font-size: 25px;
+    }
+
+
+    /* FOOD GRID */
 
     .food-grid {
         grid-template-columns: 1fr 1fr;
+
         gap: 12px;
     }
 
@@ -1388,8 +1392,9 @@ footer {
     }
 
     .food-visual {
-        height: 130px;
-        font-size: 60px;
+        height: 125px;
+
+        font-size: 57px;
     }
 
     .food-info {
@@ -1398,15 +1403,21 @@ footer {
 
     .food-info h3 {
         font-size: 15px;
+
+        line-height: 1.25;
     }
 
     .food-description {
         font-size: 12px;
+
+        line-height: 1.4;
     }
 
     .food-bottom {
         flex-direction: column;
+
         align-items: stretch;
+
         gap: 8px;
     }
 
@@ -1416,13 +1427,41 @@ footer {
 
     .add-btn {
         width: 100%;
+
         padding: 9px;
     }
 
-    /* MENU SEARCH */
+    .food-tag {
+        font-size: 9px;
+
+        padding: 5px 7px;
+    }
+
+
+    /* PAGE TITLE */
+
+    .page-title {
+        padding: 25px 20px;
+
+        border-radius: 20px;
+    }
+
+    .page-title h2 {
+        font-size: 28px;
+    }
+
+    .page-title p {
+        font-size: 14px;
+
+        line-height: 1.5;
+    }
+
+
+    /* MENU */
 
     .menu-toolbar {
         padding: 14px;
+
         border-radius: 16px;
     }
 
@@ -1431,40 +1470,56 @@ footer {
     }
 
     .category-btn {
-        padding: 8px 11px;
+        padding: 8px 10px;
+
         font-size: 12px;
     }
+
+
+    /* CARDS */
+
+    .card,
+    .order-card {
+        padding: 18px;
+
+        border-radius: 18px;
+    }
+
 
     /* CART */
 
     .cart-layout {
         grid-template-columns: 1fr;
+
         gap: 15px;
     }
 
-    .card,
-    .order-card {
-        padding: 18px;
-        border-radius: 18px;
-    }
-
     .cart-item {
-        grid-template-columns: 48px 1fr;
+        grid-template-columns:
+            48px 1fr;
+
         gap: 10px;
     }
 
     .cart-item > .remove-btn {
         grid-column: 2;
+
         width: fit-content;
     }
 
     .cart-emoji {
         width: 48px;
         height: 48px;
+
         font-size: 24px;
     }
 
-    /* DELIVERY / PICKUP */
+    .total-box {
+        font-size: 20px;
+    }
+
+
+    /* PICKUP / DELIVERY */
 
     .delivery-choice {
         grid-template-columns: 1fr;
@@ -1474,32 +1529,35 @@ footer {
         padding: 12px;
     }
 
-    /* ORDER STATUS */
+
+    /* ORDER TRACKING */
 
     .status-track {
-        grid-template-columns: repeat(4, 1fr);
-        gap: 3px;
+        grid-template-columns:
+            repeat(4, 1fr);
+
+        gap: 2px;
     }
 
     .status-circle {
         width: 32px;
         height: 32px;
-        font-size: 13px;
+
+        font-size: 12px;
     }
 
     .status-step p {
-        font-size: 10px;
+        font-size: 9px;
+
         margin-top: 6px;
     }
 
-    .order-number {
-        font-size: 13px;
-    }
 
-    /* STAFF DASHBOARD */
+    /* STAFF */
 
     .dashboard-grid {
         grid-template-columns: 1fr;
+
         gap: 15px;
     }
 
@@ -1509,55 +1567,75 @@ footer {
 
     .admin-buttons {
         display: grid;
-        grid-template-columns: 1fr 1fr;
+
+        grid-template-columns:
+            1fr 1fr;
+
+        gap: 7px;
     }
 
     .admin-buttons button {
         width: 100%;
+
+        font-size: 12px;
     }
 
     .stock-row {
-        gap: 10px;
+        gap: 8px;
     }
 
     .stock-row strong {
-        font-size: 13px;
+        font-size: 12px;
     }
 
     .stock-toggle {
         white-space: nowrap;
+
         font-size: 11px;
+
+        padding: 7px 9px;
     }
+
 
     /* FOOTER */
 
     footer {
         margin-top: 35px;
-        padding: 25px 15px;
+
+        padding: 28px 15px;
+
         font-size: 13px;
     }
+
 }
 
 
-/* EXTRA SMALL PHONES */
+/* ==================================================
+   VERY SMALL PHONES
+================================================== */
 
 @media (max-width: 400px) {
 
-    .logo h1 {
-        font-size: 18px;
+    .logo img {
+        width: 150px;
     }
 
     .nav-links a {
-        padding: 7px 8px;
-        font-size: 12px;
+        padding: 7px 7px;
+
+        font-size: 11px;
     }
 
     .hero {
-        padding: 25px 20px;
+        padding: 25px 19px;
     }
 
     .hero h2 {
         font-size: 34px;
+    }
+
+    .hero p {
+        font-size: 14px;
     }
 
     .food-grid {
@@ -1566,10 +1644,16 @@ footer {
 
     .food-visual {
         height: 150px;
+
         font-size: 70px;
     }
 
     .status-step p {
-        font-size: 9px;
+        font-size: 8px;
     }
+
+    .page-title h2 {
+        font-size: 25px;
+    }
+
 }
