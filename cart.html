@@ -1,0 +1,480 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Cart - DNHS MealHub</title>
+    <link rel="stylesheet" href="style.css">
+</head>
+
+<body>
+
+<header>
+    <nav class="navbar">
+
+        <a href="index.html" class="logo">
+            <div class="logo-icon">🍱</div>
+            <div>
+                <h1>DNHS MealHub</h1>
+                <span>Your Order</span>
+            </div>
+        </a>
+
+        <div class="nav-links">
+            <a href="index.html">Home</a>
+            <a href="menu.html">Menu</a>
+            <a href="cart.html" class="nav-cart">🛒 Cart</a>
+            <a href="staff.html">Staff</a>
+        </div>
+
+    </nav>
+</header>
+
+
+<main class="container">
+
+    <div class="page-title">
+        <h2>🛒 Your Cart</h2>
+        <p>Review your food before placing your order.</p>
+    </div>
+
+
+    <div class="cart-layout">
+
+        <div class="card">
+
+            <h2>Your Items</h2>
+
+            <div id="cartItems"></div>
+
+            <div id="totalBox" class="total-box"></div>
+
+        </div>
+
+
+        <div class="card">
+
+            <h2>Order Details</h2>
+
+            <div class="notice">
+                Please enter your information so the canteen
+                knows where to send your order.
+            </div>
+
+
+            <div class="form-group">
+
+                <label>Your Name</label>
+
+                <input
+                    id="name"
+                    type="text"
+                    placeholder="Enter your name"
+                >
+
+            </div>
+
+
+            <div class="form-group">
+
+                <label>How will you receive your order?</label>
+
+                <div class="delivery-choice">
+
+                    <label class="choice">
+
+                        <input
+                            type="radio"
+                            name="method"
+                            value="pickup"
+                            checked
+                            onchange="toggleDelivery()"
+                        >
+
+                        🏃 Pickup
+
+                    </label>
+
+
+                    <label class="choice">
+
+                        <input
+                            type="radio"
+                            name="method"
+                            value="delivery"
+                            onchange="toggleDelivery()"
+                        >
+
+                        🚚 Delivery
+
+                    </label>
+
+                </div>
+
+            </div>
+
+
+            <div id="deliveryFields"
+                style="display:none;">
+
+                <div class="form-group">
+
+                    <label>Grade</label>
+
+                    <input
+                        id="grade"
+                        type="text"
+                        placeholder="Example: Grade 10"
+                    >
+
+                </div>
+
+
+                <div class="form-group">
+
+                    <label>Section</label>
+
+                    <input
+                        id="section"
+                        type="text"
+                        placeholder="Example: Rizal"
+                    >
+
+                </div>
+
+            </div>
+
+
+            <button
+                class="primary-btn"
+                style="width:100%;"
+                onclick="placeOrder()">
+
+                🎉 Place Order
+
+            </button>
+
+            <br><br>
+
+            <a
+                href="menu.html"
+                class="secondary-btn"
+                style="display:block;text-align:center;">
+
+                ← Back to Menu
+
+            </a>
+
+        </div>
+
+    </div>
+
+</main>
+
+
+<footer>
+    <div class="footer-title">🍱 DNHS MealHub</div>
+    Dayap National High School
+</footer>
+
+
+<script>
+
+function getCart() {
+
+    return JSON.parse(
+        localStorage.getItem("cart")
+    ) || [];
+
+}
+
+
+function displayCart() {
+
+    const cart = getCart();
+
+    const container =
+        document.getElementById("cartItems");
+
+    const totalBox =
+        document.getElementById("totalBox");
+
+
+    if(cart.length === 0) {
+
+        container.innerHTML = `
+
+            <div class="empty-state">
+
+                <div class="empty-icon">🛒</div>
+
+                <h2>Your cart is empty</h2>
+
+                <p>
+                    Add something delicious from the menu.
+                </p>
+
+                <a
+                    href="menu.html"
+                    class="primary-btn">
+
+                    Browse Menu
+
+                </a>
+
+            </div>
+        `;
+
+        totalBox.innerHTML = "";
+
+        return;
+    }
+
+
+    let total = 0;
+
+
+    container.innerHTML =
+        cart.map((item,index) => {
+
+            const itemTotal =
+                item.price * item.quantity;
+
+            total += itemTotal;
+
+
+            return `
+
+                <div class="cart-item">
+
+                    <div class="cart-emoji">
+                        ${item.emoji}
+                    </div>
+
+                    <div>
+
+                        <strong>
+                            ${item.name}
+                        </strong>
+
+                        <div>
+                            ₱${item.price}
+                        </div>
+
+                        <div class="quantity-controls">
+
+                            <button
+                                onclick="changeQuantity(${index},-1)">
+                                −
+                            </button>
+
+                            <strong>
+                                ${item.quantity}
+                            </strong>
+
+                            <button
+                                onclick="changeQuantity(${index},1)">
+                                +
+                            </button>
+
+                        </div>
+
+                    </div>
+
+                    <button
+                        class="remove-btn"
+                        onclick="removeItem(${index})">
+
+                        Remove
+
+                    </button>
+
+                </div>
+
+            `;
+
+        }).join("");
+
+
+    totalBox.innerHTML = `
+
+        <span>Total</span>
+
+        <span style="color:#1769c2;">
+            ₱${total}
+        </span>
+
+    `;
+
+}
+
+
+function changeQuantity(index,change) {
+
+    let cart = getCart();
+
+    cart[index].quantity += change;
+
+    if(cart[index].quantity <= 0) {
+        cart.splice(index,1);
+    }
+
+    localStorage.setItem(
+        "cart",
+        JSON.stringify(cart)
+    );
+
+    displayCart();
+
+}
+
+
+function removeItem(index) {
+
+    let cart = getCart();
+
+    cart.splice(index,1);
+
+    localStorage.setItem(
+        "cart",
+        JSON.stringify(cart)
+    );
+
+    displayCart();
+
+}
+
+
+function toggleDelivery() {
+
+    const method =
+        document.querySelector(
+            'input[name="method"]:checked'
+        ).value;
+
+    document.getElementById(
+        "deliveryFields"
+    ).style.display =
+        method === "delivery"
+        ? "block"
+        : "none";
+
+}
+
+
+function placeOrder() {
+
+    const cart = getCart();
+
+    if(cart.length === 0) {
+        alert("Your cart is empty.");
+        return;
+    }
+
+
+    const name =
+        document.getElementById("name")
+        .value.trim();
+
+
+    if(!name) {
+        alert("Please enter your name.");
+        return;
+    }
+
+
+    const method =
+        document.querySelector(
+            'input[name="method"]:checked'
+        ).value;
+
+
+    let grade = "";
+    let section = "";
+
+
+    if(method === "delivery") {
+
+        grade =
+            document.getElementById("grade")
+            .value.trim();
+
+        section =
+            document.getElementById("section")
+            .value.trim();
+
+
+        if(!grade || !section) {
+
+            alert(
+                "Please enter your grade and section."
+            );
+
+            return;
+        }
+
+    }
+
+
+    const total =
+        cart.reduce(
+            (sum,item) =>
+                sum + item.price * item.quantity,
+            0
+        );
+
+
+    let orders =
+        JSON.parse(
+            localStorage.getItem("orders")
+        ) || [];
+
+
+    const order = {
+
+        id: Date.now(),
+
+        name: name,
+
+        grade: grade,
+
+        section: section,
+
+        method: method,
+
+        items: cart,
+
+        total: total,
+
+        status: "Pending",
+
+        createdAt: new Date().toLocaleString()
+
+    };
+
+
+    orders.push(order);
+
+
+    localStorage.setItem(
+        "orders",
+        JSON.stringify(orders)
+    );
+
+
+    localStorage.removeItem("cart");
+
+
+    window.location.href =
+        "order.html?id=" + order.id;
+
+}
+
+
+displayCart();
+
+</script>
+
+</body>
+</html>

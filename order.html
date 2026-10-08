@@ -1,0 +1,271 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Order Status - DNHS MealHub</title>
+    <link rel="stylesheet" href="style.css">
+</head>
+
+<body>
+
+<header>
+    <nav class="navbar">
+
+        <a href="index.html" class="logo">
+            <div class="logo-icon">🍱</div>
+            <div>
+                <h1>DNHS MealHub</h1>
+                <span>Order Status</span>
+            </div>
+        </a>
+
+        <div class="nav-links">
+            <a href="index.html">Home</a>
+            <a href="menu.html">Menu</a>
+            <a href="cart.html" class="nav-cart">🛒 Cart</a>
+        </div>
+
+    </nav>
+</header>
+
+
+<main class="container">
+
+    <div id="orderContainer"></div>
+
+</main>
+
+
+<footer>
+    <div class="footer-title">🍱 DNHS MealHub</div>
+    Dayap National High School
+</footer>
+
+
+<script>
+
+function getOrder() {
+
+    const params =
+        new URLSearchParams(
+            window.location.search
+        );
+
+    const id =
+        Number(params.get("id"));
+
+
+    const orders =
+        JSON.parse(
+            localStorage.getItem("orders")
+        ) || [];
+
+
+    return orders.find(
+        order => order.id === id
+    );
+
+}
+
+
+function displayOrder() {
+
+    const order = getOrder();
+
+    const container =
+        document.getElementById(
+            "orderContainer"
+        );
+
+
+    if(!order) {
+
+        container.innerHTML = `
+
+            <div class="card">
+
+                <h2>Order not found 😢</h2>
+
+                <a
+                    href="menu.html"
+                    class="primary-btn">
+
+                    Back to Menu
+
+                </a>
+
+            </div>
+
+        `;
+
+        return;
+
+    }
+
+
+    const statusOrder = [
+        "Pending",
+        "Preparing",
+        "Ready",
+        "Completed"
+    ];
+
+
+    const currentIndex =
+        statusOrder.indexOf(order.status);
+
+
+    const steps =
+        statusOrder.map(
+            (status,index) => `
+
+                <div class="status-step ${
+                    index <= currentIndex
+                    ? "active"
+                    : ""
+                }">
+
+                    <div class="status-circle">
+                        ${index + 1}
+                    </div>
+
+                    <p>${status}</p>
+
+                </div>
+
+            `
+        ).join("");
+
+
+    const items =
+        order.items
+        .map(
+            item =>
+            `${item.emoji} ${item.name} × ${item.quantity}`
+        )
+        .join("<br>");
+
+
+    container.innerHTML = `
+
+        <div class="order-card">
+
+            <h2>
+                🎉 Order received!
+            </h2>
+
+            <p>
+                Thank you, <strong>${order.name}</strong>!
+            </p>
+
+            <p class="order-number">
+                Order #${order.id}
+            </p>
+
+
+            <div class="status-track">
+                ${steps}
+            </div>
+
+
+            <p>
+                <strong>Current Status:</strong><br><br>
+
+                <span class="order-status">
+                    ${order.status}
+                </span>
+            </p>
+
+
+            <hr>
+
+
+            <h3>Your Items</h3>
+
+            <p>
+                ${items}
+            </p>
+
+
+            <h3>
+                Total:
+                <span style="color:#1769c2;">
+                    ₱${order.total}
+                </span>
+            </h3>
+
+
+            <p>
+
+                <strong>Receiving Method:</strong>
+
+                ${
+                    order.method === "delivery"
+                    ? "🚚 Delivery"
+                    : "🏃 Pickup"
+                }
+
+            </p>
+
+
+            ${
+                order.method === "delivery"
+
+                ? `
+
+                    <p>
+
+                        <strong>Grade:</strong>
+                        ${order.grade}
+
+                        <br>
+
+                        <strong>Section:</strong>
+                        ${order.section}
+
+                    </p>
+
+                `
+
+                : ""
+            }
+
+
+            <br>
+
+            <a
+                href="menu.html"
+                class="primary-btn">
+
+                Order More 🍔
+
+            </a>
+
+        </div>
+
+    `;
+
+}
+
+
+function updateStatus() {
+
+    const order = getOrder();
+
+    if(order) {
+        displayOrder();
+    }
+
+}
+
+
+displayOrder();
+
+setInterval(updateStatus,1000);
+
+</script>
+
+</body>
+</html>

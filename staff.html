@@ -1,0 +1,503 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Staff Dashboard - DNHS MealHub</title>
+    <link rel="stylesheet" href="style.css">
+</head>
+
+<body>
+
+<header>
+    <nav class="navbar">
+
+        <a href="index.html" class="logo">
+            <div class="logo-icon">🍱</div>
+
+            <div>
+                <h1>DNHS MealHub</h1>
+                <span>Staff Dashboard</span>
+            </div>
+        </a>
+
+        <div class="nav-links">
+            <a href="index.html">Home</a>
+            <a href="menu.html">Menu</a>
+        </div>
+
+    </nav>
+</header>
+
+
+<main class="container">
+
+
+<div id="loginBox" class="card"
+     style="max-width:500px;margin:50px auto;">
+
+    <h2>👩‍💼 Staff Login</h2>
+
+    <p>
+        Authorized canteen staff can manage
+        orders and food availability here.
+    </p>
+
+    <div class="notice">
+        Demo login: use <strong>staff@dnhs.demo</strong>
+    </div>
+
+    <input
+        id="staffEmail"
+        type="email"
+        placeholder="Enter staff email"
+    >
+
+    <br><br>
+
+    <button
+        class="primary-btn"
+        onclick="loginStaff()">
+
+        Login
+
+    </button>
+
+</div>
+
+
+<div id="dashboard" style="display:none;">
+
+    <div class="page-title">
+
+        <h2>📊 Staff Dashboard</h2>
+
+        <p>
+            Manage incoming orders and food availability.
+        </p>
+
+    </div>
+
+
+    <div class="dashboard-grid">
+
+
+        <div class="card">
+
+            <h2>📦 Incoming Orders</h2>
+
+            <div id="orders"></div>
+
+        </div>
+
+
+        <div class="card">
+
+            <h2>🍔 Food Availability</h2>
+
+            <p style="color:#687386;">
+                Mark food as available or sold out.
+            </p>
+
+            <div id="stock"></div>
+
+        </div>
+
+
+    </div>
+
+</div>
+
+</main>
+
+
+<footer>
+    <div class="footer-title">🍱 DNHS MealHub</div>
+    Staff Management System
+</footer>
+
+
+<script>
+
+
+const whitelist = [
+    "staff@dnhs.demo"
+];
+
+
+const foods = [
+
+    {
+        id:1,
+        name:"Chicken Sandwich",
+        emoji:"🥪"
+    },
+
+    {
+        id:2,
+        name:"Pancit",
+        emoji:"🍜"
+    },
+
+    {
+        id:3,
+        name:"Fried Chicken",
+        emoji:"🍗"
+    },
+
+    {
+        id:4,
+        name:"Classic Burger",
+        emoji:"🍔"
+    },
+
+    {
+        id:5,
+        name:"French Fries",
+        emoji:"🍟"
+    },
+
+    {
+        id:6,
+        name:"Iced Tea",
+        emoji:"🥤"
+    },
+
+    {
+        id:7,
+        name:"Hotdog Sandwich",
+        emoji:"🌭"
+    },
+
+    {
+        id:8,
+        name:"Rice Meal",
+        emoji:"🍛"
+    }
+
+];
+
+
+function loginStaff() {
+
+    const email =
+        document.getElementById(
+            "staffEmail"
+        ).value.trim().toLowerCase();
+
+
+    if(!whitelist.includes(email)) {
+
+        alert(
+            "Access denied. This email is not authorized."
+        );
+
+        return;
+
+    }
+
+
+    localStorage.setItem(
+        "staffLoggedIn",
+        "true"
+    );
+
+
+    showDashboard();
+
+}
+
+
+function showDashboard() {
+
+    document.getElementById(
+        "loginBox"
+    ).style.display = "none";
+
+
+    document.getElementById(
+        "dashboard"
+    ).style.display = "block";
+
+
+    displayOrders();
+
+    displayStock();
+
+}
+
+
+function displayOrders() {
+
+    const orders =
+        JSON.parse(
+            localStorage.getItem("orders")
+        ) || [];
+
+
+    const container =
+        document.getElementById("orders");
+
+
+    if(orders.length === 0) {
+
+        container.innerHTML = `
+
+            <div class="notice">
+                No orders yet.
+            </div>
+
+        `;
+
+        return;
+
+    }
+
+
+    container.innerHTML =
+        orders
+        .slice()
+        .reverse()
+        .map(order => {
+
+            const items =
+                order.items
+                .map(
+                    item =>
+                    `${item.emoji} ${item.name} × ${item.quantity}`
+                )
+                .join("<br>");
+
+
+            return `
+
+                <div class="order-admin">
+
+                    <h3>
+                        Order #${order.id}
+                    </h3>
+
+                    <p>
+                        <strong>
+                            ${order.name}
+                        </strong>
+                    </p>
+
+                    <p>
+                        ${items}
+                    </p>
+
+                    <p>
+                        Total:
+                        <strong>
+                            ₱${order.total}
+                        </strong>
+                    </p>
+
+                    <p>
+
+                        ${
+                            order.method === "delivery"
+
+                            ? `
+                                🚚 Delivery<br>
+                                Grade: ${order.grade}<br>
+                                Section: ${order.section}
+                            `
+
+                            : "🏃 Pickup"
+
+                        }
+
+                    </p>
+
+                    <p>
+
+                        Status:
+
+                        <span class="order-status">
+                            ${order.status}
+                        </span>
+
+                    </p>
+
+
+                    <div class="admin-buttons">
+
+                        <button
+                            onclick="updateOrder(
+                                ${order.id},
+                                'Preparing'
+                            )">
+
+                            Preparing
+
+                        </button>
+
+
+                        <button
+                            onclick="updateOrder(
+                                ${order.id},
+                                'Ready'
+                            )">
+
+                            Ready
+
+                        </button>
+
+
+                        <button
+                            onclick="updateOrder(
+                                ${order.id},
+                                'Completed'
+                            )">
+
+                            Completed
+
+                        </button>
+
+                    </div>
+
+                </div>
+
+            `;
+
+        })
+        .join("");
+
+}
+
+
+function updateOrder(id,status) {
+
+    const orders =
+        JSON.parse(
+            localStorage.getItem("orders")
+        ) || [];
+
+
+    const order =
+        orders.find(
+            item => item.id === id
+        );
+
+
+    if(order) {
+
+        order.status = status;
+
+
+        localStorage.setItem(
+            "orders",
+            JSON.stringify(orders)
+        );
+
+
+        displayOrders();
+
+    }
+
+}
+
+
+function displayStock() {
+
+    const stock =
+        JSON.parse(
+            localStorage.getItem("foodStock")
+        ) || {};
+
+
+    const container =
+        document.getElementById("stock");
+
+
+    container.innerHTML =
+        foods.map(food => {
+
+            const available =
+                stock[food.id] !== false;
+
+
+            return `
+
+                <div class="stock-row">
+
+                    <div>
+
+                        <span style="font-size:25px;">
+                            ${food.emoji}
+                        </span>
+
+                        <strong>
+                            ${food.name}
+                        </strong>
+
+                    </div>
+
+
+                    <button
+                        class="stock-toggle ${
+                            available
+                            ? "stock-on"
+                            : "stock-off"
+                        }"
+                        onclick="toggleStock(${food.id})">
+
+                        ${
+                            available
+                            ? "Available"
+                            : "Sold Out"
+                        }
+
+                    </button>
+
+                </div>
+
+            `;
+
+        }).join("");
+
+}
+
+
+function toggleStock(id) {
+
+    const stock =
+        JSON.parse(
+            localStorage.getItem("foodStock")
+        ) || {};
+
+
+    stock[id] =
+        stock[id] === false
+        ? true
+        : false;
+
+
+    localStorage.setItem(
+        "foodStock",
+        JSON.stringify(stock)
+    );
+
+
+    displayStock();
+
+}
+
+
+if(
+    localStorage.getItem(
+        "staffLoggedIn"
+    ) === "true"
+) {
+
+    showDashboard();
+
+}
+
+</script>
+
+</body>
+</html>
