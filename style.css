@@ -1231,3 +1231,345 @@ footer {
     }
 
 }
+
+/* ================================
+   MOBILE / PHONE OPTIMIZATION
+   ================================ */
+
+@media (max-width: 700px) {
+
+    body {
+        overflow-x: hidden;
+    }
+
+    .container {
+        width: 94%;
+        margin: 20px auto;
+    }
+
+    /* HEADER */
+
+    header {
+        padding: 12px 4%;
+    }
+
+    .navbar {
+        width: 100%;
+        flex-direction: column;
+        align-items: center;
+        gap: 12px;
+    }
+
+    .logo {
+        width: 100%;
+        justify-content: center;
+        text-align: center;
+    }
+
+    .logo-icon {
+        width: 42px;
+        height: 42px;
+        font-size: 23px;
+    }
+
+    .logo h1 {
+        font-size: 20px;
+    }
+
+    .logo span {
+        font-size: 10px;
+    }
+
+    .nav-links {
+        width: 100%;
+        justify-content: center;
+        gap: 5px;
+    }
+
+    .nav-links a {
+        padding: 8px 10px;
+        font-size: 13px;
+    }
+
+    /* HERO */
+
+    .hero {
+        min-height: 360px;
+        padding: 30px 24px;
+        border-radius: 24px;
+    }
+
+    .hero-content {
+        width: 100%;
+    }
+
+    .hero h2 {
+        font-size: 40px;
+        line-height: 1.05;
+    }
+
+    .hero p {
+        font-size: 15px;
+        line-height: 1.5;
+    }
+
+    .hero-food {
+        right: -20px;
+        bottom: 10px;
+        font-size: 100px;
+        opacity: .15;
+    }
+
+    .hero-buttons {
+        flex-direction: column;
+    }
+
+    .hero-buttons a {
+        width: 100%;
+        text-align: center;
+    }
+
+    /* PAGE TITLE */
+
+    .page-title {
+        padding: 25px 20px;
+        border-radius: 20px;
+    }
+
+    .page-title h2 {
+        font-size: 28px;
+    }
+
+    .page-title p {
+        font-size: 14px;
+        line-height: 1.5;
+    }
+
+    /* SECTION */
+
+    .section {
+        margin-top: 28px;
+    }
+
+    .section-heading {
+        align-items: flex-start;
+        gap: 12px;
+        flex-direction: column;
+    }
+
+    .section-heading h2 {
+        font-size: 24px;
+    }
+
+    .section-heading p {
+        font-size: 14px;
+    }
+
+    /* FEATURE CARDS */
+
+    .feature-grid {
+        grid-template-columns: 1fr;
+        gap: 14px;
+    }
+
+    .feature-card {
+        padding: 20px;
+    }
+
+    /* FOOD */
+
+    .food-grid {
+        grid-template-columns: 1fr 1fr;
+        gap: 12px;
+    }
+
+    .food-card {
+        border-radius: 16px;
+    }
+
+    .food-visual {
+        height: 130px;
+        font-size: 60px;
+    }
+
+    .food-info {
+        padding: 13px;
+    }
+
+    .food-info h3 {
+        font-size: 15px;
+    }
+
+    .food-description {
+        font-size: 12px;
+    }
+
+    .food-bottom {
+        flex-direction: column;
+        align-items: stretch;
+        gap: 8px;
+    }
+
+    .price {
+        font-size: 18px;
+    }
+
+    .add-btn {
+        width: 100%;
+        padding: 9px;
+    }
+
+    /* MENU SEARCH */
+
+    .menu-toolbar {
+        padding: 14px;
+        border-radius: 16px;
+    }
+
+    .category-row {
+        gap: 6px;
+    }
+
+    .category-btn {
+        padding: 8px 11px;
+        font-size: 12px;
+    }
+
+    /* CART */
+
+    .cart-layout {
+        grid-template-columns: 1fr;
+        gap: 15px;
+    }
+
+    .card,
+    .order-card {
+        padding: 18px;
+        border-radius: 18px;
+    }
+
+    .cart-item {
+        grid-template-columns: 48px 1fr;
+        gap: 10px;
+    }
+
+    .cart-item > .remove-btn {
+        grid-column: 2;
+        width: fit-content;
+    }
+
+    .cart-emoji {
+        width: 48px;
+        height: 48px;
+        font-size: 24px;
+    }
+
+    /* DELIVERY / PICKUP */
+
+    .delivery-choice {
+        grid-template-columns: 1fr;
+    }
+
+    .choice {
+        padding: 12px;
+    }
+
+    /* ORDER STATUS */
+
+    .status-track {
+        grid-template-columns: repeat(4, 1fr);
+        gap: 3px;
+    }
+
+    .status-circle {
+        width: 32px;
+        height: 32px;
+        font-size: 13px;
+    }
+
+    .status-step p {
+        font-size: 10px;
+        margin-top: 6px;
+    }
+
+    .order-number {
+        font-size: 13px;
+    }
+
+    /* STAFF DASHBOARD */
+
+    .dashboard-grid {
+        grid-template-columns: 1fr;
+        gap: 15px;
+    }
+
+    .order-admin {
+        padding: 14px;
+    }
+
+    .admin-buttons {
+        display: grid;
+        grid-template-columns: 1fr 1fr;
+    }
+
+    .admin-buttons button {
+        width: 100%;
+    }
+
+    .stock-row {
+        gap: 10px;
+    }
+
+    .stock-row strong {
+        font-size: 13px;
+    }
+
+    .stock-toggle {
+        white-space: nowrap;
+        font-size: 11px;
+    }
+
+    /* FOOTER */
+
+    footer {
+        margin-top: 35px;
+        padding: 25px 15px;
+        font-size: 13px;
+    }
+}
+
+
+/* EXTRA SMALL PHONES */
+
+@media (max-width: 400px) {
+
+    .logo h1 {
+        font-size: 18px;
+    }
+
+    .nav-links a {
+        padding: 7px 8px;
+        font-size: 12px;
+    }
+
+    .hero {
+        padding: 25px 20px;
+    }
+
+    .hero h2 {
+        font-size: 34px;
+    }
+
+    .food-grid {
+        grid-template-columns: 1fr;
+    }
+
+    .food-visual {
+        height: 150px;
+        font-size: 70px;
+    }
+
+    .status-step p {
+        font-size: 9px;
+    }
+}
