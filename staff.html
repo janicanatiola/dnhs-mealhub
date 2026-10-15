@@ -216,6 +216,12 @@
     <label for="foodDescription">Description</label>
     <textarea id="foodDescription" placeholder="Describe the food..." required></textarea>
 
+<label for="foodImage">Food Photo Filename</label>
+<input
+    id="foodImage"
+    type="text"
+    placeholder="e.g. siomai-rice.png"
+>
     <button type="submit" class="primary-btn" id="foodSubmitBtn">
         Add Food
     </button>
@@ -630,6 +636,7 @@ function saveFood(event) {
     const category = document.getElementById("foodCategory").value;
     const emoji = document.getElementById("foodEmoji").value.trim();
     const description = document.getElementById("foodDescription").value.trim();
+    const image = document.getElementById("foodImage").value.trim();
 
     if (!name || !emoji || !description || !Number.isFinite(price) || price <= 0) {
         alert("Please enter valid details for every field.");
@@ -641,7 +648,7 @@ function saveFood(event) {
     if (id) {
         customFoods = customFoods.map(food =>
             food.id === Number(id)
-                ? { ...food, name, price, category, emoji, description }
+                ? { ...food, name, price, category, emoji, description, image }
                 : food
         );
     } else {
@@ -651,7 +658,8 @@ function saveFood(event) {
             price,
             category,
             emoji,
-            description
+            description,
+            image
         };
 
         customFoods.push(newFood);
@@ -675,6 +683,7 @@ function editFood(id) {
     document.getElementById("foodCategory").value = food.category;
     document.getElementById("foodEmoji").value = food.emoji;
     document.getElementById("foodDescription").value = food.description;
+    document.getElementById("foodImage").value = food.image || "";
     document.getElementById("foodSubmitBtn").textContent = "Save Changes";
 
     document.getElementById("foodForm").scrollIntoView({
@@ -722,6 +731,7 @@ function displayCustomFoods() {
 
 function resetFoodForm() {
     document.getElementById("foodForm").reset();
+    document.getElementById("foodImage").value = "";
     document.getElementById("foodId").value = "";
     document.getElementById("foodSubmitBtn").textContent = "Add Food";
 }

@@ -327,13 +327,12 @@ function displayFoods() {
                 <div class="food-card">
 
                     <div class="food-visual">
-
-                        <span class="food-tag">
-                            ${food.category}
-                        </span>
-
-                        ${food.emoji}
-
+                    <span class="food-tag">${food.category}</span>
+                    ${
+                    food.image
+                    ? `<img src="${food.image}" alt="${food.name}" class="food-image">`
+                    : food.emoji
+                    }
                     </div>
 
 
