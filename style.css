@@ -1698,3 +1698,86 @@ footer {
 .food-visual {
     overflow: hidden;
 }
+
+
+/* ================================
+   STAFF FOOD FORM POLISH
+================================ */
+
+/* Consistent form field styling */
+#foodForm input:not([type="hidden"]),
+#foodForm select,
+#foodForm textarea {
+    width: 100%;
+    padding: 13px 15px;
+    margin-top: 6px;
+    margin-bottom: 16px;
+    border: 2px solid #d7e7d4;
+    border-radius: 12px;
+    background: #fffefa;
+    color: var(--text);
+    font-family: Arial, sans-serif;
+    font-size: 15px;
+    transition: border-color 0.2s, box-shadow 0.2s;
+}
+
+/* Focus effect */
+#foodForm input:focus,
+#foodForm select:focus,
+#foodForm textarea:focus {
+    border-color: var(--green);
+    box-shadow: 0 0 0 3px rgba(23, 107, 58, 0.1);
+    outline: none;
+}
+
+/* Description box */
+#foodForm textarea {
+    min-height: 115px;
+    resize: vertical;
+    line-height: 1.5;
+}
+
+/* Field labels */
+#foodForm label {
+    display: block;
+    margin-top: 4px;
+    color: var(--green);
+    font-size: 14px;
+    font-weight: bold;
+}
+
+/* Food photo filename hint */
+#foodImage {
+    background: #f7fbee;
+    border-style: dashed;
+}
+
+/* Add Food and Clear Form buttons */
+#foodForm button {
+    margin: 4px 6px 4px 0;
+    padding: 12px 18px;
+    border-radius: 12px;
+    font-size: 14px;
+    font-weight: bold;
+    transition: background 0.2s, transform 0.2s;
+}
+
+/* Clear Form button */
+#foodForm button[type="button"] {
+    background: #fff3d6;
+    color: #79551a;
+    border: 1px solid #f2d59a;
+    box-shadow: none;
+}
+
+#foodForm button[type="button"]:hover {
+    background: #ffe4a3;
+    transform: translateY(-1px);
+}
+
+/* Keep buttons comfortable on small screens */
+@media (max-width: 500px) {
+    #foodForm button {
+        margin-bottom: 8px;
+    }
+}
