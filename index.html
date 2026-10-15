@@ -1,395 +1,327 @@
+```html
 <!DOCTYPE html>
 <html lang="en">
-
 <head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>DNHS MealHub | Home</title>
 
-    <meta charset="UTF-8">
+  <style>
+    * { box-sizing: border-box; }
 
-    <meta
-        name="viewport"
-        content="width=device-width, initial-scale=1.0"
-    >
+    body {
+      margin: 0;
+      font-family: Arial, sans-serif;
+      background: #f5f7fb;
+      color: #222;
+    }
 
-    <title>DNHS MealHub</title>
+    header {
+      background: #123d2b;
+      color: white;
+      padding: 20px 5%;
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      gap: 15px;
+      flex-wrap: wrap;
+    }
 
-    <link
-        rel="stylesheet"
-        href="style.css"
-    >
+    header h1 { margin: 0; font-size: 25px; }
 
+    nav {
+      display: flex;
+      gap: 15px;
+      flex-wrap: wrap;
+    }
+
+    nav a {
+      color: white;
+      text-decoration: none;
+      font-weight: bold;
+    }
+
+    .hero {
+      background: #dff3e5;
+      padding: 65px 7%;
+      text-align: center;
+    }
+
+    .hero h2 {
+      color: #123d2b;
+      font-size: clamp(30px, 5vw, 48px);
+      margin: 0 0 15px;
+    }
+
+    .hero p {
+      max-width: 600px;
+      margin: 0 auto 25px;
+      line-height: 1.7;
+      color: #45564b;
+    }
+
+    .button {
+      display: inline-block;
+      background: #176b43;
+      color: white;
+      text-decoration: none;
+      padding: 13px 20px;
+      border-radius: 9px;
+      font-weight: bold;
+      margin: 5px;
+    }
+
+    .button.secondary {
+      background: white;
+      color: #176b43;
+      border: 1px solid #176b43;
+    }
+
+    main {
+      width: min(1100px, 92%);
+      margin: 35px auto;
+    }
+
+    .section-heading {
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      gap: 12px;
+      flex-wrap: wrap;
+    }
+
+    .section-heading h2 { color: #123d2b; }
+
+    .food-grid {
+      display: grid;
+      grid-template-columns: repeat(auto-fit, minmax(220px, 1fr));
+      gap: 20px;
+    }
+
+    .food-card {
+      background: white;
+      border-radius: 13px;
+      padding: 20px;
+      box-shadow: 0 3px 12px #00000010;
+    }
+
+    .food-image {
+      width: 100%;
+      height: 155px;
+      object-fit: cover;
+      border-radius: 9px;
+      background: #edf1ed;
+    }
+
+    .food-emoji {
+      height: 155px;
+      display: grid;
+      place-items: center;
+      font-size: 65px;
+      background: #edf1ed;
+      border-radius: 9px;
+    }
+
+    .food-card h3 { margin-bottom: 8px; }
+
+    .food-card p {
+      color: #667085;
+      line-height: 1.5;
+    }
+
+    .price {
+      color: #176b43 !important;
+      font-size: 19px;
+      font-weight: bold;
+    }
+
+    .features {
+      display: grid;
+      grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
+      gap: 18px;
+      margin: 35px 0;
+    }
+
+    .feature {
+      background: white;
+      padding: 22px;
+      border-radius: 12px;
+      text-align: center;
+    }
+
+    .feature span {
+      display: block;
+      font-size: 35px;
+      margin-bottom: 10px;
+    }
+
+    footer {
+      background: #123d2b;
+      color: white;
+      text-align: center;
+      padding: 25px;
+      margin-top: 45px;
+    }
+
+    #message {
+      line-height: 1.5;
+      color: #667085;
+    }
+  </style>
 </head>
 
 <body>
-
-<header>
-
-    <nav class="navbar">
-
-        <a
-            href="index.html"
-            class="logo"
-        >
-
-            <img
-                src="logo.png"
-                alt="DNHS MealHub Logo"
-            >
-
-        </a>
-
-        <div class="nav-links">
-
-            <a href="index.html">
-                Home
-            </a>
-
-            <a href="menu.html">
-                Menu
-            </a>
-
-             <a href="#" onclick="trackLatestOrder(); return false;">📦 Track Order</a>
-            <a
-                href="cart.html"
-                class="nav-cart"
-            >
-                🛒 Cart
-            </a>
-
-            <a href="staff.html">
-                👤 Staff
-            </a>
-
-        </div>
-
+  <header>
+    <h1>🍽️ DNHS MealHub</h1>
+    <nav>
+      <a href="index.html">Home</a>
+      <a href="menu.html">Menu</a>
+      <a href="cart.html">My Cart</a>
+      <a href="order.html">Track Order</a>
+      <a href="staff.html">Staff</a>
     </nav>
+  </header>
 
-</header>
+  <section class="hero">
+    <h2>Your School Canteen, Made Easier!</h2>
+    <p>
+      Welcome to DNHS MealHub. Explore your favorite canteen meals,
+      add them to your cart, and place your order online.
+      Less lining up, more time for your school day!
+    </p>
+    <a class="button" href="menu.html">Explore Menu</a>
+    <a class="button secondary" href="cart.html">View My Cart</a>
+  </section>
 
+  <main>
+    <section>
+      <div class="section-heading">
+        <h2>Popular Food Items</h2>
+        <a href="menu.html">View Full Menu →</a>
+      </div>
 
-<main class="container">
-
-
-    <section class="hero">
-
-        <div class="hero-content">
-
-            <span class="hero-badge">
-                🍴 DNHS Online Canteen
-            </span>
-
-            <h2>
-                Welcome to
-                <br>
-                <span>DNHS MealHub</span>
-            </h2>
-
-            <p>
-                Good Food • Great Choices •
-                For Our DNHS Family
-            </p>
-
-            <p>
-                Browse the canteen menu, place your
-                order online, and spend less time waiting.
-            </p>
-
-            <div class="hero-buttons">
-
-                <a
-                    href="menu.html"
-                    class="primary-btn"
-                >
-                    🍔 Order Now →
-                </a>
-
-                <a
-                    href="cart.html"
-                    class="secondary-btn"
-                >
-                    🛒 View Cart
-                </a>
-
-            </div>
-
-        </div>
-
-        <div class="hero-food">
-            🍗
-        </div>
-
+      <p id="message" role="status">Loading food items...</p>
+      <div id="foodGrid" class="food-grid"></div>
     </section>
 
+    <section class="features">
+      <div class="feature">
+        <span>📱</span>
+        <h3>Easy Ordering</h3>
+        <p>Browse the menu and select your food online.</p>
+      </div>
 
-    <section class="section">
+      <div class="feature">
+        <span>⏱️</span>
+        <h3>Save Time</h3>
+        <p>Spend less time waiting in line at the canteen.</p>
+      </div>
 
-        <div class="section-heading">
-
-            <div>
-
-                <h2>
-                    Everything you need
-                </h2>
-
-                <p>
-                    A simpler way to order from the DNHS canteen.
-                </p>
-
-            </div>
-
-        </div>
-
-
-        <div class="feature-grid">
-
-            <a
-                href="menu.html"
-                class="feature-card"
-            >
-
-                <div class="feature-icon">
-                    🍴
-                </div>
-
-                <h3>
-                    View Menu
-                </h3>
-
-                <p>
-                    Check out our delicious food and drinks.
-                </p>
-
-            </a>
-
-
-            <a
-                href="menu.html"
-                class="feature-card"
-            >
-
-                <div class="feature-icon">
-                    🛒
-                </div>
-
-                <h3>
-                    Place Order
-                </h3>
-
-                <p>
-                    Add your favorite meals to your cart.
-                </p>
-
-            </a>
-
-
-            <a
-                href="cart.html"
-                class="feature-card"
-            >
-
-                <div class="feature-icon">
-                    ⏱️
-                </div>
-
-                <h3>
-                    Track Order
-                </h3>
-
-                <p>
-                    Stay updated on your order status.
-                </p>
-
-            </a>
-
-
-            <a
-                href="staff.html"
-                class="feature-card"
-            >
-
-                <div class="feature-icon">
-                    👥
-                </div>
-
-                <h3>
-                    For Staff
-                </h3>
-
-                <p>
-                    Manage orders and food availability.
-                </p>
-
-            </a>
-
-        </div>
-
+      <div class="feature">
+        <span>📦</span>
+        <h3>Track Your Order</h3>
+        <p>Check your order status after submitting it.</p>
+      </div>
     </section>
 
-
-    <section class="section">
-
-        <div class="section-heading">
-
-            <div>
-
-                <h2>
-                    🍽️ Popular Today
-                </h2>
-
-                <p>
-                    Some of the canteen favorites.
-                </p>
-
-            </div>
-
-            <a
-                href="menu.html"
-                class="primary-btn"
-            >
-                See Full Menu →
-            </a>
-
-        </div>
-
-
-        <div class="food-grid">
-
-            <div class="food-card">
-
-                <div class="food-visual">
-
-                    <span class="food-tag">
-                        Popular
-                    </span>
-
-                    🍗
-
-                </div>
-
-                <div class="food-info">
-
-                    <h3>
-                        Fried Chicken
-                    </h3>
-
-                    <p class="food-description">
-                        Crispy and filling school meal.
-                    </p>
-
-                    <div class="food-bottom">
-
-                        <span class="price">
-                            ₱45
-                        </span>
-
-                    </div>
-
-                </div>
-
-            </div>
-
-
-            <div class="food-card">
-
-                <div class="food-visual">
-
-                    <span class="food-tag">
-                        Favorite
-                    </span>
-
-                    🍔
-
-                </div>
-
-                <div class="food-info">
-
-                    <h3>
-                        Classic Burger
-                    </h3>
-
-                    <p class="food-description">
-                        A quick and tasty canteen favorite.
-                    </p>
-
-                    <div class="food-bottom">
-
-                        <span class="price">
-                            ₱40
-                        </span>
-
-                    </div>
-
-                </div>
-
-            </div>
-
-
-            <div class="food-card">
-
-                <div class="food-visual">
-
-                    <span class="food-tag">
-                        Drink
-                    </span>
-
-                    🥤
-
-                </div>
-
-                <div class="food-info">
-
-                    <h3>
-                        Iced Tea
-                    </h3>
-
-                    <p class="food-description">
-                        A refreshing drink for lunch.
-                    </p>
-
-                    <div class="food-bottom">
-
-                        <span class="price">
-                            ₱20
-                        </span>
-
-                    </div>
-
-                </div>
-
-            </div>
-
-        </div>
-
+    <section class="feature">
+      <h2>Already placed an order?</h2>
+      <p>Open your latest order on this device to check its status.</p>
+      <a class="button" href="order.html" id="trackButton">Track My Order</a>
     </section>
+  </main>
 
-</main>
+  <footer>
+    <p><strong>DNHS MealHub</strong></p>
+    <p>A school canteen ordering website project.</p>
+  </footer>
 
+  <script src="https://www.gstatic.com/firebasejs/11.10.0/firebase-app-compat.js"></script>
+  <script src="https://www.gstatic.com/firebasejs/11.10.0/firebase-auth-compat.js"></script>
+  <script src="https://www.gstatic.com/firebasejs/11.10.0/firebase-firestore-compat.js"></script>
+  <script src="firebase.js"></script>
 
-<footer>
+  <script>
+    const foodGrid = document.getElementById("foodGrid");
+    const message = document.getElementById("message");
 
-    <div class="footer-title">
-        🍱 DNHS MealHub
-    </div>
+    function renderFood(items) {
+      foodGrid.replaceChildren();
 
-    Dayap National High School
+      const availableItems = items
+        .filter(item => item.available !== false)
+        .slice(0, 4);
 
-    <div style="margin-top:8px;font-size:13px;">
-        Your school canteen, made easier.
-    </div>
+      if (availableItems.length === 0) {
+        message.textContent = "No food items are available yet. Please check the full menu later.";
+        return;
+      }
 
-</footer>
+      message.textContent = "";
 
-<script>
-function trackLatestOrder() {
-    const id = localStorage.getItem("latestOrderId");
+      availableItems.forEach(food => {
+        const card = document.createElement("article");
+        card.className = "food-card";
 
-    if (id) {
-        window.location.href =
-            "order.html?id=" + encodeURIComponent(id);
-    } else {
-        alert("No recent order found. Please place an order first.");
+        if (food.image) {
+          const image = document.createElement("img");
+          image.className = "food-image";
+          image.src = food.image;
+          image.alt = food.name || "Food item";
+          image.loading = "lazy";
+          image.onerror = () => {
+            const fallback = document.createElement("div");
+            fallback.className = "food-emoji";
+            fallback.textContent = food.emoji || "🍽️";
+            image.replaceWith(fallback);
+          };
+          card.appendChild(image);
+        } else {
+          const emoji = document.createElement("div");
+          emoji.className = "food-emoji";
+          emoji.textContent = food.emoji || "🍽️";
+          card.appendChild(emoji);
+        }
+
+        const title = document.createElement("h3");
+        title.textContent = food.name || "Food item";
+
+        const description = document.createElement("p");
+        description.textContent = food.description || "Available at the school canteen.";
+
+        const price = document.createElement("p");
+        price.className = "price";
+        price.textContent = "₱" + money(food.price);
+
+        const link = document.createElement("a");
+        link.className = "button";
+        link.href = "menu.html";
+        link.textContent = "Order Now";
+
+        card.append(title, description, price, link);
+        foodGrid.appendChild(card);
+      });
     }
-}
-</script>
 
+    async function loadPopularFood() {
+      try {
+        const items = await getMenuItems();
+        renderFood(items);
+      } catch (error) {
+        console.error(error);
+        message.textContent =
+          "Unable to load the menu right now. Please visit the full menu or try again later.";
+      }
+    }
+
+    const latestOrderId = localStorage.getItem("latestOrderId");
+    if (latestOrderId) {
+      document.getElementById("trackButton").href =
+        "order.html?id=" + encodeURIComponent(latestOrderId);
+    }
+
+    loadPopularFood();
+  </script>
 </body>
 </html>
+```

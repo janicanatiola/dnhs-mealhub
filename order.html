@@ -1,362 +1,245 @@
+```html
 <!DOCTYPE html>
 <html lang="en">
-
 <head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Track Order | DNHS MealHub</title>
 
-    <meta charset="UTF-8">
+  <style>
+    * { box-sizing: border-box; }
 
-    <meta
-        name="viewport"
-        content="width=device-width, initial-scale=1.0"
-    >
+    body {
+      margin: 0;
+      font-family: Arial, sans-serif;
+      background: #f5f7fb;
+      color: #222;
+    }
 
-    <title>Order Status - DNHS MealHub</title>
+    header {
+      background: #123d2b;
+      color: white;
+      text-align: center;
+      padding: 22px 15px;
+    }
 
-    <link
-        rel="stylesheet"
-        href="style.css"
-    >
+    header h1 { margin: 0 0 10px; }
 
+    nav a {
+      color: white;
+      text-decoration: none;
+      margin: 0 10px;
+    }
+
+    main {
+      width: min(800px, 92%);
+      margin: 30px auto;
+    }
+
+    .panel {
+      background: white;
+      border-radius: 14px;
+      padding: 24px;
+      margin-bottom: 20px;
+      box-shadow: 0 3px 12px #00000010;
+    }
+
+    .status {
+      display: inline-block;
+      background: #fff0c2;
+      color: #765400;
+      padding: 9px 15px;
+      border-radius: 20px;
+      font-weight: bold;
+    }
+
+    .step {
+      padding: 13px;
+      margin: 8px 0;
+      border-radius: 8px;
+      background: #f0f2f3;
+    }
+
+    .step.active {
+      background: #d9f4e4;
+      color: #14532d;
+      font-weight: bold;
+    }
+
+    .item {
+      display: flex;
+      justify-content: space-between;
+      gap: 12px;
+      padding: 12px 0;
+      border-bottom: 1px solid #eee;
+    }
+
+    .total {
+      display: flex;
+      justify-content: space-between;
+      font-size: 20px;
+      font-weight: bold;
+      margin-top: 20px;
+    }
+
+    .button {
+      display: inline-block;
+      background: #176b43;
+      color: white;
+      text-decoration: none;
+      padding: 12px 16px;
+      border-radius: 8px;
+      font-weight: bold;
+      border: none;
+      cursor: pointer;
+    }
+
+    .muted { color: #666; }
+
+    #message {
+      overflow-wrap: anywhere;
+      line-height: 1.5;
+    }
+  </style>
 </head>
 
 <body>
-
-<header>
-
-    <nav class="navbar">
-
-        <a
-            href="index.html"
-            class="logo"
-        >
-
-            <img
-                src="logo.png"
-                alt="DNHS MealHub Logo"
-            >
-
-        </a>
-
-
-        <div class="nav-links">
-
-            <a href="index.html">
-                Home
-            </a>
-
-            <a href="menu.html">
-                Menu
-            </a>
-
-            <a
-                href="cart.html"
-                class="nav-cart"
-            >
-                🛒 Cart
-            </a>
-
-            <a href="staff.html">
-                👤 Staff
-            </a>
-
-        </div>
-
+  <header>
+    <h1>📦 DNHS MealHub</h1>
+    <p>Track your order</p>
+    <nav>
+      <a href="index.html">Home</a>
+      <a href="menu.html">Menu</a>
+      <a href="cart.html">My Cart</a>
     </nav>
+  </header>
 
-</header>
+  <main>
+    <section class="panel">
+      <h2>Your Order</h2>
+      <p class="muted">Keep this page open to see status updates.</p>
 
+      <p><strong>Order ID:</strong> <span id="orderId">Loading...</span></p>
+      <p><strong>Status:</strong> <span id="status" class="status">Loading...</span></p>
 
-<main class="container">
+      <div id="progress">
+        <div class="step" data-status="Pending">1. Order received</div>
+        <div class="step" data-status="Preparing">2. Preparing your food</div>
+        <div class="step" data-status="Ready">3. Ready for pickup</div>
+        <div class="step" data-status="Completed">4. Order completed</div>
+      </div>
 
-    <div id="orderContainer"></div>
+      <p id="message" role="status">Connecting to order information...</p>
+    </section>
 
-</main>
+    <section class="panel" id="detailsPanel" hidden>
+      <h2>Order Details</h2>
+      <div id="items"></div>
+      <div class="total">
+        <span>Total</span>
+        <span>₱<span id="total">0.00</span></span>
+      </div>
+    </section>
 
+    <p><a class="button" href="menu.html">Order More Food</a></p>
+  </main>
 
-<footer>
+  <script src="https://www.gstatic.com/firebasejs/11.10.0/firebase-app-compat.js"></script>
+  <script src="https://www.gstatic.com/firebasejs/11.10.0/firebase-auth-compat.js"></script>
+  <script src="https://www.gstatic.com/firebasejs/11.10.0/firebase-firestore-compat.js"></script>
+  <script src="firebase.js"></script>
 
-    <div class="footer-title">
-        🍱 DNHS MealHub
-    </div>
+  <script>
+    const params = new URLSearchParams(window.location.search);
+    const orderId = params.get("id") || localStorage.getItem("latestOrderId");
 
-    Dayap National High School
+    const orderIdElement = document.getElementById("orderId");
+    const statusElement = document.getElementById("status");
+    const messageElement = document.getElementById("message");
+    const detailsPanel = document.getElementById("detailsPanel");
+    const itemsElement = document.getElementById("items");
+    const totalElement = document.getElementById("total");
 
-</footer>
+    orderIdElement.textContent = orderId || "Not provided";
 
-
-<script>
-
-function getOrder() {
-
-    const params =
-        new URLSearchParams(
-            window.location.search
-        );
-
-
-    const id =
-        Number(
-            params.get("id")
-        );
-
-
-    const orders =
-        JSON.parse(
-            localStorage.getItem("orders")
-        ) || [];
-
-
-    return orders.find(
-        order =>
-            order.id === id
-    );
-
-}
-
-
-function displayOrder() {
-
-    const order = getOrder();
-
-
-    const container =
-        document.getElementById(
-            "orderContainer"
-        );
-
-
-    if (!order) {
-
-        container.innerHTML = `
-
-            <div class="card">
-
-                <h2>
-                    Order not found 😢
-                </h2>
-
-                <a
-                    href="menu.html"
-                    class="primary-btn"
-                >
-                    Back to Menu
-                </a>
-
-            </div>
-
-        `;
-
-        return;
-
+    function showError(message) {
+      messageElement.textContent = message;
+      messageElement.style.color = "#b42318";
     }
 
+    function renderOrder(order) {
+      const status = String(order.status || "Pending");
+      statusElement.textContent = status;
 
-    const statusOrder = [
+      const progressStatuses = [
+        "Pending", "Preparing", "Ready", "Completed"
+      ];
 
-        "Pending",
-        "Preparing",
-        "Ready",
-        "Completed"
+      const currentIndex = progressStatuses.indexOf(status);
 
-    ];
-
-
-    const currentIndex =
-        statusOrder.indexOf(
-            order.status
+      document.querySelectorAll(".step").forEach(step => {
+        const stepIndex = progressStatuses.indexOf(step.dataset.status);
+        step.classList.toggle(
+          "active",
+          currentIndex >= 0 && stepIndex <= currentIndex
         );
-
-
-    const steps =
-        statusOrder
-            .map(
-                (status, index) => `
-
-                    <div
-                        class="status-step ${
-                            index <= currentIndex
-                                ? "active"
-                                : ""
-                        }"
-                    >
-
-                        <div
-                            class="status-circle"
-                        >
-                            ${index + 1}
-                        </div>
-
-                        <p>
-                            ${status}
-                        </p>
-
-                    </div>
-
-                `
-            )
-            .join("");
-
-
-    const items =
-        order.items
-            .map(
-                item =>
-                    `${item.emoji}
-                    ${item.name}
-                    × ${item.quantity}`
-            )
-            .join("<br>");
-
-
-    container.innerHTML = `
-
-        <div class="order-card">
-
-            <h2>
-                🎉 Order received!
-            </h2>
-
-
-            <p>
-                Thank you,
-                <strong>
-                    ${order.name}
-                </strong>!
-            </p>
-
-
-            <p class="order-number">
-                Order #${order.id}
-            </p>
-
-
-            <div class="status-track">
-
-                ${steps}
-
-            </div>
-
-
-            <p>
-
-                <strong>
-                    Current Status:
-                </strong>
-
-                <br><br>
-
-                <span class="order-status">
-                    ${order.status}
-                </span>
-
-            </p>
-
-
-            <hr>
-
-
-            <h3>
-                Your Items
-            </h3>
-
-
-            <p>
-                ${items}
-            </p>
-
-
-            <h3>
-
-                Total:
-
-                <span
-                    style="color:#ff9f1c;"
-                >
-                    ₱${order.total}
-                </span>
-
-            </h3>
-
-
-            <p>
-
-                <strong>
-                    Student Information:
-                </strong>
-
-                <br>
-
-                Name:
-                ${order.name}
-
-                <br>
-
-                Grade:
-                ${order.grade}
-
-                <br>
-
-                Section:
-                ${order.section}
-
-            </p>
-
-
-            <p>
-
-                <strong>
-                    Receiving Method:
-                </strong>
-
-                ${
-                    order.method === "delivery"
-                        ? "🚚 Delivery"
-                        : "🏃 Pickup"
-                }
-
-            </p>
-
-
-            <br>
-
-
-            <a
-                href="menu.html"
-                class="primary-btn"
-            >
-
-                Order More 🍔
-
-            </a>
-
-        </div>
-
-    `;
-
-}
-
-
-function updateStatus() {
-
-    const order = getOrder();
-
-    if (order) {
-
-        displayOrder();
-
+      });
+
+      if (status === "Cancelled") {
+        messageElement.textContent = "This order has been cancelled. Please contact the canteen staff if you need help.";
+      } else if (status === "Completed") {
+        messageElement.textContent = "Your order is complete. Thank you for ordering!";
+      } else if (status === "Ready") {
+        messageElement.textContent = "Your food is ready! Please proceed to the canteen for pickup.";
+      } else if (status === "Preparing") {
+        messageElement.textContent = "The canteen is preparing your order.";
+      } else {
+        messageElement.textContent = "Your order has been received. Please wait for updates.";
+      }
+
+      itemsElement.replaceChildren();
+
+      (Array.isArray(order.items) ? order.items : []).forEach(item => {
+        const row = document.createElement("div");
+        row.className = "item";
+
+        const description = document.createElement("span");
+        description.textContent =
+          (item.emoji || "🍽️") + " " +
+          (item.name || "Food item") +
+          " × " + Number(item.quantity || 1);
+
+        const price = document.createElement("strong");
+        price.textContent =
+          "₱" + money(Number(item.price || 0) * Number(item.quantity || 1));
+
+        row.append(description, price);
+        itemsElement.appendChild(row);
+      });
+
+      totalElement.textContent = money(Number(order.total || 0));
+      detailsPanel.hidden = false;
     }
 
-}
+    if (!orderId) {
+      showError("No order ID found. Place an order from the menu first.");
+    } else {
+      db.collection(ORDERS_COLLECTION)
+        .doc(orderId)
+        .onSnapshot(snapshot => {
+          if (!snapshot.exists) {
+            showError("Order not found. Check the order link or try again later.");
+            detailsPanel.hidden = true;
+            return;
+          }
 
-
-displayOrder();
-
-setInterval(
-    updateStatus,
-    1000
-);
-
-</script>
-
+          renderOrder(snapshot.data());
+        }, error => {
+          console.error(error);
+          showError("Unable to load order updates. Please check your internet connection and Firestore rules.");
+        });
+    }
+  </script>
 </body>
 </html>
+```

@@ -1,608 +1,325 @@
+```html
 <!DOCTYPE html>
 <html lang="en">
-
 <head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>My Cart | DNHS MealHub</title>
 
-    <meta charset="UTF-8">
+  <style>
+    * {
+      box-sizing: border-box;
+    }
 
-    <meta
-        name="viewport"
-        content="width=device-width, initial-scale=1.0"
-    >
+    body {
+      margin: 0;
+      font-family: Arial, sans-serif;
+      background: #f5f7fb;
+      color: #222;
+    }
 
-    <title>Cart - DNHS MealHub</title>
+    header {
+      background: #123d2b;
+      color: white;
+      padding: 20px;
+      text-align: center;
+    }
 
-    <link
-        rel="stylesheet"
-        href="style.css"
-    >
+    header h1 {
+      margin: 0 0 8px;
+    }
 
+    nav a {
+      color: white;
+      margin: 0 10px;
+      text-decoration: none;
+    }
+
+    main {
+      width: min(900px, 92%);
+      margin: 30px auto;
+    }
+
+    .panel {
+      background: white;
+      border-radius: 14px;
+      padding: 22px;
+      box-shadow: 0 3px 12px #00000010;
+      margin-bottom: 20px;
+    }
+
+    .cart-item {
+      display: flex;
+      align-items: center;
+      gap: 15px;
+      padding: 16px 0;
+      border-bottom: 1px solid #eee;
+    }
+
+    .food-emoji {
+      font-size: 36px;
+    }
+
+    .details {
+      flex: 1;
+    }
+
+    .details h3 {
+      margin: 0 0 7px;
+    }
+
+    .quantity {
+      width: 70px;
+      padding: 8px;
+      border: 1px solid #ccc;
+      border-radius: 7px;
+    }
+
+    button, .link-button {
+      border: 0;
+      border-radius: 8px;
+      padding: 11px 15px;
+      cursor: pointer;
+      font-weight: bold;
+      text-decoration: none;
+      display: inline-block;
+    }
+
+    .primary {
+      background: #176b43;
+      color: white;
+    }
+
+    .remove {
+      background: #ffe8e8;
+      color: #a32020;
+    }
+
+    .secondary {
+      background: #e8eee9;
+      color: #123d2b;
+    }
+
+    .total-row {
+      display: flex;
+      justify-content: space-between;
+      font-size: 20px;
+      font-weight: bold;
+      margin: 20px 0;
+    }
+
+    .actions {
+      display: flex;
+      flex-wrap: wrap;
+      gap: 10px;
+    }
+
+    #message {
+      margin: 15px 0;
+      font-weight: bold;
+    }
+
+    .empty {
+      text-align: center;
+      padding: 30px 10px;
+    }
+
+    @media (max-width: 520px) {
+      .cart-item {
+        flex-wrap: wrap;
+      }
+
+      .details {
+        min-width: 150px;
+      }
+    }
+  </style>
 </head>
 
 <body>
-
-<header>
-
-    <nav class="navbar">
-
-        <a
-            href="index.html"
-            class="logo"
-        >
-
-            <img
-                src="logo.png"
-                alt="DNHS MealHub Logo"
-            >
-
-        </a>
-
-        <div class="nav-links">
-
-            <a href="index.html">
-                Home
-            </a>
-
-            <a href="menu.html">
-                Menu
-            </a>
-
-            <a
-                href="cart.html"
-                class="nav-cart"
-            >
-                🛒 Cart
-            </a>
-
-            <a href="staff.html">
-                👤 Staff
-            </a>
-
-        </div>
-
+  <header>
+    <h1>🛒 DNHS MealHub</h1>
+    <p>Your food, your order</p>
+    <nav>
+      <a href="index.html">Home</a>
+      <a href="menu.html">Menu</a>
+      <a href="order.html">Track Order</a>
     </nav>
+  </header>
 
-</header>
-
-
-<main class="container">
-
-    <div class="page-title">
-
-        <h2>
-            🛒 Your Cart
-        </h2>
-
-        <p>
-            Review your food before placing your order.
-        </p>
-
-    </div>
-
-
-    <div class="cart-layout">
-
-
-        <div class="card">
-
-            <h2>
-                Your Items
-            </h2>
-
-            <div id="cartItems"></div>
-
-            <div
-                id="totalBox"
-                class="total-box"
-            ></div>
-
+  <main>
+    <section class="panel">
+      <h2>My Cart</h2>
+      <p>Review your items before placing your order.</p>
+      <div id="cartItems">Loading cart...</div>
+      <div id="summary" hidden>
+        <div class="total-row">
+          <span>Total</span>
+          <span>₱<span id="total">0.00</span></span>
         </div>
-
-
-        <div class="card">
-
-            <h2>
-                Order Details
-            </h2>
-
-
-            <div class="notice">
-
-                Please enter your name, grade, and
-                section before placing your order.
-
-            </div>
-
-
-            <br>
-
-
-            <div class="form-group">
-
-                <label>
-                    Your Name
-                </label>
-
-                <input
-                    id="name"
-                    type="text"
-                    placeholder="Enter your name"
-                >
-
-            </div>
-
-
-            <div class="form-group">
-
-                <label>
-                    Grade
-                </label>
-
-                <input
-                    id="grade"
-                    type="text"
-                    placeholder="Example: Grade 10"
-                >
-
-            </div>
-
-
-            <div class="form-group">
-
-                <label>
-                    Section
-                </label>
-
-                <input
-                    id="section"
-                    type="text"
-                    placeholder="Example: Flores"
-                >
-
-            </div>
-
-
-            <div class="form-group">
-
-                <label>
-                    How will you receive your order?
-                </label>
-
-
-                <div class="delivery-choice">
-
-
-                    <label class="choice">
-
-                        <input
-                            type="radio"
-                            name="method"
-                            value="pickup"
-                            checked
-                        >
-
-                        🏃 Pickup
-
-                    </label>
-
-
-                    <label class="choice">
-
-                        <input
-                            type="radio"
-                            name="method"
-                            value="delivery"
-                        >
-
-                        🚚 Delivery
-
-                    </label>
-
-
-                </div>
-
-            </div>
-
-
-            <button
-                class="primary-btn"
-                style="width:100%;"
-                onclick="placeOrder()"
-            >
-
-                🎉 Place Order
-
-            </button>
-
-
-            <br><br>
-
-
-            <a
-                href="menu.html"
-                class="secondary-btn"
-                style="
-                    display:block;
-                    text-align:center;
-                "
-            >
-
-                ← Back to Menu
-
-            </a>
-
+        <div class="actions">
+          <button class="primary" id="checkoutButton" onclick="checkout()">
+            Place Order
+          </button>
+          <a class="link-button secondary" href="menu.html">Add More Food</a>
         </div>
+      </div>
+      <p id="message" role="status"></p>
+    </section>
+  </main>
 
-    </div>
+  <script src="https://www.gstatic.com/firebasejs/11.10.0/firebase-app-compat.js"></script>
+  <script src="https://www.gstatic.com/firebasejs/11.10.0/firebase-auth-compat.js"></script>
+  <script src="https://www.gstatic.com/firebasejs/11.10.0/firebase-firestore-compat.js"></script>
+  <script src="firebase.js"></script>
 
-</main>
+  <script>
+    const cartItemsElement = document.getElementById("cartItems");
+    const summaryElement = document.getElementById("summary");
+    const totalElement = document.getElementById("total");
+    const messageElement = document.getElementById("message");
+    const checkoutButton = document.getElementById("checkoutButton");
 
+    function getCart() {
+      try {
+        const cart = JSON.parse(localStorage.getItem("cart") || "[]");
+        return Array.isArray(cart) ? cart : [];
+      } catch {
+        return [];
+      }
+    }
 
-<footer>
+    function saveCart(cart) {
+      localStorage.setItem("cart", JSON.stringify(cart));
+    }
 
-    <div class="footer-title">
-        🍱 DNHS MealHub
-    </div>
+    function showMessage(message, isError = false) {
+      messageElement.textContent = message;
+      messageElement.style.color = isError ? "#b42318" : "#176b43";
+    }
 
-    Dayap National High School
+    function renderCart() {
+      const cart = getCart();
+      cartItemsElement.replaceChildren();
 
-</footer>
+      if (cart.length === 0) {
+        const empty = document.createElement("div");
+        empty.className = "empty";
 
+        const heading = document.createElement("h3");
+        heading.textContent = "Your cart is empty.";
 
-<script>
+        const link = document.createElement("a");
+        link.href = "menu.html";
+        link.className = "link-button primary";
+        link.textContent = "Browse Menu";
 
-function getCart() {
-
-    return JSON.parse(
-        localStorage.getItem("cart")
-    ) || [];
-
-}
-
-
-function displayCart() {
-
-    const cart = getCart();
-
-    const container =
-        document.getElementById(
-            "cartItems"
-        );
-
-    const totalBox =
-        document.getElementById(
-            "totalBox"
-        );
-
-
-    if (cart.length === 0) {
-
-        container.innerHTML = `
-
-            <div class="empty-state">
-
-                <div class="empty-icon">
-                    🛒
-                </div>
-
-                <h2>
-                    Your cart is empty
-                </h2>
-
-                <p>
-                    Add something delicious
-                    from the menu.
-                </p>
-
-                <a
-                    href="menu.html"
-                    class="primary-btn"
-                >
-                    Browse Menu
-                </a>
-
-            </div>
-
-        `;
-
-        totalBox.innerHTML = "";
-
+        empty.append(heading, link);
+        cartItemsElement.appendChild(empty);
+        summaryElement.hidden = true;
         return;
+      }
 
+      summaryElement.hidden = false;
+      let total = 0;
+
+      cart.forEach((item, index) => {
+        const quantity = Math.max(1, Math.floor(Number(item.quantity) || 1));
+        const price = Number(item.price) || 0;
+        total += price * quantity;
+
+        const row = document.createElement("div");
+        row.className = "cart-item";
+
+        const emoji = document.createElement("div");
+        emoji.className = "food-emoji";
+        emoji.textContent = item.emoji || "🍽️";
+
+        const details = document.createElement("div");
+        details.className = "details";
+
+        const name = document.createElement("h3");
+        name.textContent = item.name || "Food item";
+
+        const priceText = document.createElement("p");
+        priceText.textContent = "₱" + money(price) + " each";
+
+        details.append(name, priceText);
+
+        const quantityInput = document.createElement("input");
+        quantityInput.className = "quantity";
+        quantityInput.type = "number";
+        quantityInput.min = "1";
+        quantityInput.max = "50";
+        quantityInput.value = String(quantity);
+        quantityInput.setAttribute("aria-label", "Quantity for " + (item.name || "food item"));
+
+        quantityInput.addEventListener("change", () => {
+          const updatedCart = getCart();
+          const newQuantity = Math.floor(Number(quantityInput.value));
+
+          if (!Number.isFinite(newQuantity) || newQuantity < 1 || newQuantity > 50) {
+            showMessage("Quantity must be between 1 and 50.", true);
+            renderCart();
+            return;
+          }
+
+          updatedCart[index].quantity = newQuantity;
+          saveCart(updatedCart);
+          showMessage("");
+          renderCart();
+        });
+
+        const removeButton = document.createElement("button");
+        removeButton.className = "remove";
+        removeButton.textContent = "Remove";
+
+        removeButton.addEventListener("click", () => {
+          const updatedCart = getCart();
+          updatedCart.splice(index, 1);
+          saveCart(updatedCart);
+          showMessage("Item removed.");
+          renderCart();
+        });
+
+        const subtotal = document.createElement("strong");
+        subtotal.textContent = "₱" + money(price * quantity);
+
+        row.append(emoji, details, quantityInput, subtotal, removeButton);
+        cartItemsElement.appendChild(row);
+      });
+
+      totalElement.textContent = money(total);
     }
 
-
-    let total = 0;
-
-
-    container.innerHTML =
-        cart.map((item, index) => {
-
-            const itemTotal =
-                item.price *
-                item.quantity;
-
-            total += itemTotal;
-
-
-            return `
-
-                <div class="cart-item">
-
-                    <div class="cart-emoji">
-                        ${item.emoji}
-                    </div>
-
-
-                    <div>
-
-                        <strong>
-                            ${item.name}
-                        </strong>
-
-                        <div>
-                            ₱${item.price}
-                        </div>
-
-
-                        <div
-                            class="quantity-controls"
-                        >
-
-                            <button
-                                onclick="
-                                    changeQuantity(
-                                        ${index},
-                                        -1
-                                    )
-                                "
-                            >
-                                −
-                            </button>
-
-
-                            <strong>
-                                ${item.quantity}
-                            </strong>
-
-
-                            <button
-                                onclick="
-                                    changeQuantity(
-                                        ${index},
-                                        1
-                                    )
-                                "
-                            >
-                                +
-                            </button>
-
-                        </div>
-
-                    </div>
-
-
-                    <button
-                        class="remove-btn"
-                        onclick="
-                            removeItem(${index})
-                        "
-                    >
-
-                        Remove
-
-                    </button>
-
-                </div>
-
-            `;
-
-        }).join("");
-
-
-    totalBox.innerHTML = `
-
-        <span>
-            Total
-        </span>
-
-        <span style="color:#ff9f1c;">
-            ₱${total}
-        </span>
-
-    `;
-
-}
-
-
-function changeQuantity(index, change) {
-
-    let cart = getCart();
-
-    cart[index].quantity += change;
-
-
-    if (cart[index].quantity <= 0) {
-
-        cart.splice(index, 1);
-
-    }
-
-
-    localStorage.setItem(
-        "cart",
-        JSON.stringify(cart)
-    );
-
-
-    displayCart();
-
-}
-
-
-function removeItem(index) {
-
-    let cart = getCart();
-
-    cart.splice(index, 1);
-
-
-    localStorage.setItem(
-        "cart",
-        JSON.stringify(cart)
-    );
-
-
-    displayCart();
-
-}
-
-
-function placeOrder() {
-
-    const cart = getCart();
-
-
-    if (cart.length === 0) {
-
-        alert(
-            "Your cart is empty."
-        );
-
+    async function checkout() {
+      const cart = getCart();
+
+      if (cart.length === 0) {
+        showMessage("Your cart is empty.", true);
         return;
+      }
 
+      checkoutButton.disabled = true;
+      checkoutButton.textContent = "Placing Order...";
+      showMessage("Submitting your order...");
+
+      try {
+        const orderId = await createOrder(cart);
+        window.location.href = "order.html?id=" + encodeURIComponent(orderId);
+      } catch (error) {
+        console.error(error);
+        showMessage(
+          error.message || "Could not place your order. Please try again.",
+          true
+        );
+        checkoutButton.disabled = false;
+        checkoutButton.textContent = "Place Order";
+      }
     }
 
-
-    const name =
-        document
-            .getElementById("name")
-            .value
-            .trim();
-
-
-    const grade =
-        document
-            .getElementById("grade")
-            .value
-            .trim();
-
-
-    const section =
-        document
-            .getElementById("section")
-            .value
-            .trim();
-
-
-    if (!name) {
-
-        alert(
-            "Please enter your name."
-        );
-
-        return;
-
-    }
-
-
-    if (!grade) {
-
-        alert(
-            "Please enter your grade."
-        );
-
-        return;
-
-    }
-
-
-    if (!section) {
-
-        alert(
-            "Please enter your section."
-        );
-
-        return;
-
-    }
-
-
-    const method =
-        document.querySelector(
-            'input[name="method"]:checked'
-        ).value;
-
-
-    const total =
-        cart.reduce(
-            (sum, item) =>
-                sum +
-                item.price *
-                item.quantity,
-            0
-        );
-
-
-    let orders =
-        JSON.parse(
-            localStorage.getItem("orders")
-        ) || [];
-
-
-    const order = {
-
-        id: Date.now(),
-
-        name: name,
-
-        grade: grade,
-
-        section: section,
-
-        method: method,
-
-        items: cart,
-
-        total: total,
-
-        status: "Pending",
-
-        createdAt:
-            new Date().toLocaleString()
-
-    };
-
-
-    orders.push(order);
-
-localStorage.setItem(
-    "orders",
-    JSON.stringify(orders)
-);
-
-// Remember the latest order for tracking
-localStorage.setItem(
-    "latestOrderId",
-    String(order.id)
-);
-
-
-    localStorage.removeItem(
-        "cart"
-    );
-
-
-    window.location.href =
-        "order.html?id=" +
-        order.id;
-
-}
-
-
-displayCart();
-
-</script>
-
+    renderCart();
+  </script>
 </body>
 </html>
+```

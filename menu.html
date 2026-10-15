@@ -1,387 +1,195 @@
+```html
 <!DOCTYPE html>
 <html lang="en">
-
 <head>
-
     <meta charset="UTF-8">
-
-    <meta
-        name="viewport"
-        content="width=device-width, initial-scale=1.0"
-    >
-
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Menu - DNHS MealHub</title>
-
-    <link
-        rel="stylesheet"
-        href="style.css"
-    >
-
+    <link rel="stylesheet" href="style.css">
 </head>
-
 <body>
 
 <header>
-
     <nav class="navbar">
-
-        <a
-            href="index.html"
-            class="logo"
-        >
-
-            <img
-                src="logo.png"
-                alt="DNHS MealHub Logo"
-            >
-
+        <a href="index.html" class="logo">
+            <img src="logo.png" alt="DNHS MealHub Logo">
         </a>
-
         <div class="nav-links">
-
-            <a href="index.html">
-                Home
-            </a>
-
-            <a href="menu.html">
-                Menu
-            </a>
-
-            <a
-                href="cart.html"
-                class="nav-cart"
-            >
-                🛒 Cart
-            </a>
-
-            <a href="staff.html">
-                👤 Staff
-            </a>
-
+            <a href="index.html">Home</a>
+            <a href="menu.html">Menu</a>
+            <a href="#" onclick="trackOrder(); return false;">📦 Track Order</a>
+            <a href="cart.html" class="nav-cart">🛒 Cart</a>
+            <a href="staff.html">👤 Staff</a>
         </div>
-
     </nav>
-
 </header>
 
-
 <main class="container">
-
     <div class="page-title">
-
-        <h2>
-            🍴 Today's Menu
-        </h2>
-
-        <p>
-            Choose what you want from the DNHS canteen.
-        </p>
-
+        <h2>🍴 Today's Menu</h2>
+        <p>Choose what you want from the DNHS canteen.</p>
     </div>
-
 
     <div class="menu-toolbar">
-
-        <input
-            id="search"
-            class="search-box"
-            type="text"
-            placeholder="🔎 Search food..."
-            oninput="displayFoods()"
-        >
+        <input id="search" class="search-box" type="text"
+               placeholder="🔎 Search food..." oninput="displayFoods()">
 
         <div class="category-row">
-
-            <button
-                class="category-btn active"
-                onclick="setCategory('All',this)"
-            >
-                All
-            </button>
-
-            <button
-                class="category-btn"
-                onclick="setCategory('Meals',this)"
-            >
-                🍱 Meals
-            </button>
-
-            <button
-                class="category-btn"
-                onclick="setCategory('Snacks',this)"
-            >
-                🍟 Snacks
-            </button>
-
-            <button
-                class="category-btn"
-                onclick="setCategory('Drinks',this)"
-            >
-                🥤 Drinks
-            </button>
-
+            <button class="category-btn active" onclick="setCategory('All', this)">All</button>
+            <button class="category-btn" onclick="setCategory('Meals', this)">🍱 Meals</button>
+            <button class="category-btn" onclick="setCategory('Snacks', this)">🍟 Snacks</button>
+            <button class="category-btn" onclick="setCategory('Drinks', this)">🥤 Drinks</button>
         </div>
-
     </div>
 
-
-    <div
-        id="foodGrid"
-        class="food-grid"
-    ></div>
-
+    <p id="message" role="status">Loading menu...</p>
+    <div id="foodGrid" class="food-grid"></div>
 </main>
 
-
 <footer>
-
-    <div class="footer-title">
-        🍱 DNHS MealHub
-    </div>
-
+    <div class="footer-title">🍱 DNHS MealHub</div>
     Dayap National High School
-
 </footer>
 
+<script src="https://www.gstatic.com/firebasejs/11.10.0/firebase-app-compat.js"></script>
+<script src="https://www.gstatic.com/firebasejs/11.10.0/firebase-auth-compat.js"></script>
+<script src="https://www.gstatic.com/firebasejs/11.10.0/firebase-firestore-compat.js"></script>
+<script src="firebase.js"></script>
 
 <script>
-
-const foods = [];
-
-
-function getCustomFoods() {
-    return JSON.parse(localStorage.getItem("customFoods")) || [];
-}
-
-function getAllFoods() {
-    return foods.concat(getCustomFoods());
-}
-
-
+let foods = [];
 let selectedCategory = "All";
 
-
-function getStock() {
-
-    return JSON.parse(
-        localStorage.getItem("foodStock")
-    ) || {};
-
+function trackOrder() {
+    const id = localStorage.getItem("latestOrderId");
+    if (id) {
+        location.href = "order.html?id=" + encodeURIComponent(id);
+    } else {
+        alert("No recent order found in this browser.");
+    }
 }
-
 
 function setCategory(category, button) {
-
     selectedCategory = category;
 
-    document
-        .querySelectorAll(".category-btn")
-        .forEach(btn =>
-            btn.classList.remove("active")
-        );
+    document.querySelectorAll(".category-btn")
+        .forEach(btn => btn.classList.remove("active"));
 
     button.classList.add("active");
-
     displayFoods();
-
 }
 
+async function loadFoods() {
+    const message = document.getElementById("message");
+
+    try {
+        foods = await getMenuItems();
+        message.textContent = foods.length
+            ? ""
+            : "No food added yet. Staff can add food from the Staff page.";
+
+        displayFoods();
+    } catch (error) {
+        message.textContent =
+            "Could not load menu. Check your Firebase setup and Firestore rules.";
+        console.error(error);
+    }
+}
+
+function escapeHTML(value) {
+    return String(value ?? "").replace(/[&<>"']/g, char => ({
+        "&": "&amp;",
+        "<": "&lt;",
+        ">": "&gt;",
+        '"': "&quot;",
+        "'": "&#39;"
+    })[char]);
+}
 
 function displayFoods() {
+    const grid = document.getElementById("foodGrid");
+    const search = document.getElementById("search").value.toLowerCase();
 
-    const grid =
-        document.getElementById("foodGrid");
+    const filtered = foods.filter(food =>
+        String(food.name || "").toLowerCase().includes(search) &&
+        (selectedCategory === "All" || food.category === selectedCategory)
+    );
 
-    const search =
-        document
-            .getElementById("search")
-            .value
-            .toLowerCase();
-
-    const stock = getStock();
-
-
-    const filtered = getAllFoods().filter(food => {
-
-        const matchesSearch =
-            food.name
-                .toLowerCase()
-                .includes(search);
-
-        const matchesCategory =
-            selectedCategory === "All" ||
-            food.category === selectedCategory;
-
-        return matchesSearch &&
-            matchesCategory;
-
-    });
-
-
-    if (filtered.length === 0) {
-
+    if (!filtered.length) {
         grid.innerHTML = `
-
             <div class="card">
-
-                <h2>
-                    No food found 😢
-                </h2>
-
-                <p>
-                    Try another search.
-                </p>
-
-            </div>
-
-        `;
-
+                <h2>No food found 😢</h2>
+                <p>Try another search or check back later.</p>
+            </div>`;
         return;
-
     }
 
+    grid.innerHTML = filtered.map(food => {
+        const available = food.available !== false;
 
-    grid.innerHTML =
-        filtered.map(food => {
+        const visual = food.image
+            ? `<img src="${escapeHTML(food.image)}"
+                    alt="${escapeHTML(food.name)}"
+                    class="food-image">`
+            : escapeHTML(food.emoji || "🍽️");
 
-            const available =
-                stock[food.id] !== false;
-
-
-            return `
-
-                <div class="food-card">
-
-                    <div class="food-visual">
-                    <span class="food-tag">${food.category}</span>
-                    ${
-                    food.image
-                    ? `<img src="${food.image}" alt="${food.name}" class="food-image">`
-                    : food.emoji
-                    }
-                    </div>
-
-
-                    <div class="food-info">
-
-                        <h3>
-                            ${food.name}
-                        </h3>
-
-                        <p class="food-description">
-                            ${food.description}
-                        </p>
-
-
-                        <span class="status ${
-                            available
-                                ? "available"
-                                : "sold-out"
-                        }">
-
-                            ${
-                                available
-                                    ? "Available"
-                                    : "Sold Out"
-                            }
-
-                        </span>
-
-
-                        <div class="food-bottom">
-
-                            <span class="price">
-                                ₱${food.price}
-                            </span>
-
-
-                            <button
-                                class="add-btn"
-                                ${
-                                    available
-                                        ? ""
-                                        : "disabled"
-                                }
-                                onclick="addToCart(${food.id})"
-                            >
-
-                                ${
-                                    available
-                                        ? "Add +"
-                                        : "Sold Out"
-                                }
-
-                            </button>
-
-                        </div>
-
-                    </div>
-
+        return `
+            <div class="food-card">
+                <div class="food-visual">
+                    <span class="food-tag">${escapeHTML(food.category || "Meals")}</span>
+                    ${visual}
                 </div>
 
-            `;
+                <div class="food-info">
+                    <h3>${escapeHTML(food.name)}</h3>
+                    <p class="food-description">${escapeHTML(food.description || "")}</p>
 
-        }).join("");
+                    <span class="status ${available ? "available" : "sold-out"}">
+                        ${available ? "Available" : "Sold Out"}
+                    </span>
 
+                    <div class="food-bottom">
+                        <span class="price">₱${money(food.price)}</span>
+                        <button class="add-btn"
+                            ${available ? "" : "disabled"}
+                            onclick="addToCart('${escapeHTML(food.id)}')">
+                            ${available ? "Add +" : "Sold Out"}
+                        </button>
+                    </div>
+                </div>
+            </div>`;
+    }).join("");
 }
-
 
 function addToCart(id) {
+    const food = foods.find(item => String(item.id) === String(id));
 
-    let cart =
-        JSON.parse(
-            localStorage.getItem("cart")
-        ) || [];
-
-
-    const food =
-        getAllFoods().find(
-            item => item.id === id
-        );
-
-
-    const existing =
-        cart.find(
-            item => item.id === id
-        );
-
-
-    if (existing) {
-
-        existing.quantity++;
-
-    } else {
-
-        cart.push({
-
-            id: food.id,
-            name: food.name,
-            price: food.price,
-            emoji: food.emoji,
-            quantity: 1
-
-        });
-
+    if (!food || food.available === false) {
+        alert("This food is currently unavailable.");
+        return;
     }
 
+    const cart = JSON.parse(localStorage.getItem("cart") || "[]");
+    const existing = cart.find(item => String(item.id) === String(food.id));
 
-    localStorage.setItem(
-        "cart",
-        JSON.stringify(cart)
-    );
+    if (existing) {
+        existing.quantity++;
+    } else {
+        cart.push({
+            id: String(food.id),
+            name: food.name,
+            price: Number(food.price),
+            emoji: food.emoji || "🍽️",
+            quantity: 1
+        });
+    }
 
-
-    alert(
-        food.name +
-        " added to cart! 🛒"
-    );
-
+    localStorage.setItem("cart", JSON.stringify(cart));
+    alert(food.name + " added to cart! 🛒");
 }
 
-
-displayFoods();
-
+loadFoods();
 </script>
-
 </body>
 </html>
+```
