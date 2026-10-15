@@ -747,5 +747,23 @@ if (
 
 </script>
 
+<script src="https://www.gstatic.com/firebasejs/11.10.0/firebase-app-compat.js"></script>
+<script src="https://www.gstatic.com/firebasejs/11.10.0/firebase-firestore-compat.js"></script>
+
+<script>
+  const firebaseConfig = {
+    apiKey: "AIzaSyA6htOpoLQFKzLwXuHFpADjzymcAKXBRZU",
+    authDomain: "dnhs-mealhub.firebaseapp.com",
+    projectId: "dnhs-mealhub",
+    storageBucket: "dnhs-mealhub.firebasestorage.app",
+    messagingSenderId: "890490482703",
+    appId: "1:890490482703:web:8627555c12525bb216f37a",
+    measurementId: "G-P0SC5F2G4Z"
+  };
+
+  firebase.initializeApp(firebaseConfig);
+  const db = firebase.firestore();
+</script>
+
 </body>
 </html>
