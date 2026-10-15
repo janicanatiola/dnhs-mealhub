@@ -111,6 +111,14 @@
             placeholder="Enter your email"
         >
 
+        <label for="staffPassword">Staff Password</label>
+        <input
+            type="password"
+            id="staffPassword"
+            placeholder="Enter staff password"
+            required
+>
+
 
         <br><br>
 
@@ -224,6 +232,12 @@ function loginStaff() {
 
     }
 
+    const password = document.getElementById("staffPassword").value;
+
+if (password !== "DNHSSTAFF2026") {
+    alert("Incorrect staff password.");
+    return;
+}
 
     localStorage.setItem(
         "staffLoggedIn",
