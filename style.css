@@ -1657,3 +1657,29 @@ footer {
     }
 
 }
+
+
+/* Staff Logout Button */
+.logout-btn {
+    display: block;
+    margin: 20px 0 12px auto;
+    padding: 10px 20px;
+    background: linear-gradient(135deg, #ff9f1c, #ff7b00);
+    color: white;
+    border: none;
+    border-radius: 12px;
+    font-size: 15px;
+    font-weight: 600;
+    cursor: pointer;
+    box-shadow: 0 4px 10px rgba(255, 145, 0, 0.22);
+    transition: transform 0.2s ease, box-shadow 0.2s ease;
+}
+
+.logout-btn:hover {
+    transform: translateY(-2px);
+    box-shadow: 0 6px 14px rgba(255, 145, 0, 0.3);
+}
+
+.logout-btn:active {
+    transform: translateY(0);
+}
