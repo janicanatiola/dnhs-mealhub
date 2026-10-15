@@ -190,6 +190,46 @@
 
                 </p>
 
+<hr>
+
+<h3>➕ Add a Menu Item</h3>
+
+<form id="foodForm" onsubmit="saveFood(event)">
+    <input type="hidden" id="foodId">
+
+    <label for="foodName">Food Name</label>
+    <input id="foodName" type="text" placeholder="e.g. Siomai Rice" required>
+
+    <label for="foodPrice">Price (₱)</label>
+    <input id="foodPrice" type="number" min="1" step="0.01" placeholder="e.g. 35" required>
+
+    <label for="foodCategory">Category</label>
+    <select id="foodCategory" required>
+        <option value="Meals">Meals</option>
+        <option value="Snacks">Snacks</option>
+        <option value="Drinks">Drinks</option>
+    </select>
+
+    <label for="foodEmoji">Food Emoji</label>
+    <input id="foodEmoji" type="text" placeholder="e.g. 🍱" required>
+
+    <label for="foodDescription">Description</label>
+    <textarea id="foodDescription" placeholder="Describe the food..." required></textarea>
+
+    <button type="submit" class="primary-btn" id="foodSubmitBtn">
+        Add Food
+    </button>
+
+    <button type="button" onclick="resetFoodForm()">
+        Clear Form
+    </button>
+</form>
+
+<h3>📝 Custom Menu Items</h3>
+<div id="customFoods"></div>
+
+<hr>
+
                 <div id="stock"></div>
 
             </div>
@@ -542,83 +582,148 @@ const foods = [
 ];
 
 
+
+function getCustomFoods() {
+    return JSON.parse(localStorage.getItem("customFoods")) || [];
+}
+
+function getAllFoods() {
+    return foods.concat(getCustomFoods());
+}
+
 function displayStock() {
-
     const stock =
-        JSON.parse(
-            localStorage.getItem(
-                "foodStock"
-            )
-        ) || {};
+        JSON.parse(localStorage.getItem("foodStock")) || {};
+
+    const container = document.getElementById("stock");
+
+    container.innerHTML = getAllFoods().map(food => {
+        const available = stock[food.id] !== false;
+
+        return `
+            <div class="stock-row">
+                <div>
+                    <span style="font-size:25px;">${food.emoji}</span>
+                    <strong>${food.name}</strong>
+                </div>
+
+                <button
+                    class="stock-toggle ${available ? "stock-on" : "stock-off"}"
+                    onclick="toggleStock(${food.id})"
+                >
+                    ${available ? "Available" : "Sold Out"}
+                </button>
+            </div>
+        `;
+    }).join("");
+
+    displayCustomFoods();
+}
 
 
-    const container =
-        document.getElementById(
-            "stock"
+function saveFood(event) {
+    event.preventDefault();
+
+    const id = document.getElementById("foodId").value;
+    const name = document.getElementById("foodName").value.trim();
+    const price = Number(document.getElementById("foodPrice").value);
+    const category = document.getElementById("foodCategory").value;
+    const emoji = document.getElementById("foodEmoji").value.trim();
+    const description = document.getElementById("foodDescription").value.trim();
+
+    if (!name || !emoji || !description || !Number.isFinite(price) || price <= 0) {
+        alert("Please enter valid details for every field.");
+        return;
+    }
+
+    let customFoods = getCustomFoods();
+
+    if (id) {
+        customFoods = customFoods.map(food =>
+            food.id === Number(id)
+                ? { ...food, name, price, category, emoji, description }
+                : food
         );
+    } else {
+        const newFood = {
+            id: Date.now(),
+            name,
+            price,
+            category,
+            emoji,
+            description
+        };
 
+        customFoods.push(newFood);
+    }
 
-    container.innerHTML =
-        foods
-            .map(food => {
+    localStorage.setItem("customFoods", JSON.stringify(customFoods));
 
-                const available =
-                    stock[food.id] !== false;
+    resetFoodForm();
+    displayStock();
 
+    alert(id ? "Menu item updated!" : "Menu item added!");
+}
 
-                return `
+function editFood(id) {
+    const food = getCustomFoods().find(item => item.id === id);
+    if (!food) return;
 
-                    <div class="stock-row">
+    document.getElementById("foodId").value = food.id;
+    document.getElementById("foodName").value = food.name;
+    document.getElementById("foodPrice").value = food.price;
+    document.getElementById("foodCategory").value = food.category;
+    document.getElementById("foodEmoji").value = food.emoji;
+    document.getElementById("foodDescription").value = food.description;
+    document.getElementById("foodSubmitBtn").textContent = "Save Changes";
 
-                        <div>
+    document.getElementById("foodForm").scrollIntoView({
+        behavior: "smooth",
+        block: "center"
+    });
+}
 
-                            <span
-                                style="
-                                    font-size:25px;
-                                "
-                            >
-                                ${food.emoji}
-                            </span>
+function deleteFood(id) {
+    if (!confirm("Delete this menu item?")) return;
 
+    const customFoods = getCustomFoods().filter(food => food.id !== id);
 
-                            <strong>
-                                ${food.name}
-                            </strong>
+    localStorage.setItem("customFoods", JSON.stringify(customFoods));
 
-                        </div>
+    const stock = JSON.parse(localStorage.getItem("foodStock")) || {};
+    delete stock[id];
+    localStorage.setItem("foodStock", JSON.stringify(stock));
 
+    displayStock();
+}
 
-                        <button
-                            class="
-                                stock-toggle
-                                ${
-                                    available
-                                        ? "stock-on"
-                                        : "stock-off"
-                                }
-                            "
-                            onclick="
-                                toggleStock(
-                                    ${food.id}
-                                )
-                            "
-                        >
+function displayCustomFoods() {
+    const container = document.getElementById("customFoods");
+    const customFoods = getCustomFoods();
 
-                            ${
-                                available
-                                    ? "Available"
-                                    : "Sold Out"
-                            }
+    if (customFoods.length === 0) {
+        container.innerHTML = "<p>No custom menu items yet.</p>";
+        return;
+    }
 
-                        </button>
+    container.innerHTML = customFoods.map(food => `
+        <div class="stock-row">
+            <div>
+                <strong>${food.emoji} ${food.name}</strong>
+                <p>₱${food.price} · ${food.category}</p>
+            </div>
+            <div>
+                <button type="button" onclick="editFood(${food.id})">Edit</button>
+                <button type="button" onclick="deleteFood(${food.id})">Delete</button>
+            </div>
+        </div>
+    `).join("");
+}
 
-                    </div>
-
-                `;
-
-            })
-            .join("");
-
+function resetFoodForm() {
+    document.getElementById("foodForm").reset();
+    document.getElementById("foodId").value = "";
+    document.getElementById("foodSubmitBtn").textContent = "Add Food";
 }
 
 

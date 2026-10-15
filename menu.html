@@ -223,6 +223,15 @@ const foods = [
 ];
 
 
+function getCustomFoods() {
+    return JSON.parse(localStorage.getItem("customFoods")) || [];
+}
+
+function getAllFoods() {
+    return foods.concat(getCustomFoods());
+}
+
+
 let selectedCategory = "All";
 
 
@@ -266,7 +275,7 @@ function displayFoods() {
     const stock = getStock();
 
 
-    const filtered = foods.filter(food => {
+    const filtered = getAllFoods().filter(food => {
 
         const matchesSearch =
             food.name
@@ -401,7 +410,7 @@ function addToCart(id) {
 
 
     const food =
-        foods.find(
+        getAllFoods().find(
             item => item.id === id
         );
 
