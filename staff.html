@@ -706,28 +706,49 @@ function deleteFood(id) {
     displayStock();
 }
 
+
 function displayCustomFoods() {
     const container = document.getElementById("customFoods");
     const customFoods = getCustomFoods();
+    const stock = JSON.parse(localStorage.getItem("foodStock")) || {};
 
     if (customFoods.length === 0) {
         container.innerHTML = "<p>No custom menu items yet.</p>";
         return;
     }
 
-    container.innerHTML = customFoods.map(food => `
-        <div class="stock-row">
-            <div>
-                <strong>${food.emoji} ${food.name}</strong>
-                <p>₱${food.price} · ${food.category}</p>
+    container.innerHTML = customFoods.map(food => {
+        const available = stock[food.id] !== false;
+
+        return `
+            <div class="stock-row">
+                <div>
+                    <strong>${food.emoji} ${food.name}</strong>
+                    <p>₱${food.price} · ${food.category}</p>
+                </div>
+
+                <div class="admin-buttons">
+                    <button
+                        type="button"
+                        class="stock-toggle ${available ? "stock-on" : "stock-off"}"
+                        onclick="toggleStock(${food.id})"
+                    >
+                        ${available ? "Available" : "Sold Out"}
+                    </button>
+
+                    <button type="button" onclick="editFood(${food.id})">
+                        Edit
+                    </button>
+
+                    <button type="button" onclick="deleteFood(${food.id})">
+                        Delete
+                    </button>
+                </div>
             </div>
-            <div>
-                <button type="button" onclick="editFood(${food.id})">Edit</button>
-                <button type="button" onclick="deleteFood(${food.id})">Delete</button>
-            </div>
-        </div>
-    `).join("");
+        `;
+    }).join("");
 }
+
 
 function resetFoodForm() {
     document.getElementById("foodForm").reset();
