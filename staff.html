@@ -1,519 +1,1023 @@
-```html
 <!DOCTYPE html>
 <html lang="en">
+
+
 <head>
-  <meta charset="UTF-8">
-  <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <title>Staff Dashboard | DNHS MealHub</title>
 
-  <style>
-    * { box-sizing: border-box; }
 
-    body {
-      margin: 0;
-      font-family: Arial, sans-serif;
-      background: #f4f6f8;
-      color: #222;
-    }
+   <meta charset="UTF-8">
 
-    header {
-      background: #123d2b;
-      color: white;
-      padding: 22px;
-      text-align: center;
-    }
 
-    header h1 { margin: 0 0 8px; }
+   <meta
+       name="viewport"
+       content="width=device-width, initial-scale=1.0"
+   >
 
-    nav a {
-      color: white;
-      margin: 0 10px;
-      text-decoration: none;
-    }
 
-    main {
-      width: min(1100px, 94%);
-      margin: 25px auto;
-    }
+   <title>
+       Staff Dashboard - DNHS MealHub
+   </title>
 
-    .panel {
-      background: white;
-      padding: 22px;
-      border-radius: 14px;
-      margin-bottom: 22px;
-      box-shadow: 0 3px 12px #00000010;
-    }
 
-    input, select, textarea {
-      width: 100%;
-      padding: 11px;
-      border: 1px solid #ccd2d8;
-      border-radius: 8px;
-      margin: 6px 0 14px;
-      font: inherit;
-    }
+   <link
+       rel="stylesheet"
+       href="style.css"
+   >
 
-    textarea {
-      min-height: 75px;
-      resize: vertical;
-    }
 
-    label { font-weight: bold; }
-
-    button {
-      border: none;
-      border-radius: 8px;
-      padding: 11px 15px;
-      margin: 4px;
-      font-weight: bold;
-      cursor: pointer;
-    }
-
-    button:disabled {
-      opacity: .6;
-      cursor: wait;
-    }
-
-    .primary { background: #176b43; color: white; }
-    .secondary { background: #e8eee9; color: #123d2b; }
-    .danger { background: #ffe4e4; color: #a32020; }
-
-    .grid {
-      display: grid;
-      grid-template-columns: repeat(auto-fit, minmax(240px, 1fr));
-      gap: 16px;
-    }
-
-    .food-card, .order-card {
-      border: 1px solid #e2e6e9;
-      border-radius: 10px;
-      padding: 16px;
-      overflow-wrap: anywhere;
-    }
-
-    .food-card h3, .order-card h3 { margin-top: 0; }
-
-    .muted { color: #667085; }
-
-    .badge {
-      display: inline-block;
-      padding: 5px 9px;
-      border-radius: 20px;
-      background: #e8eee9;
-      font-size: 13px;
-      font-weight: bold;
-    }
-
-    .unavailable { background: #ffe4e4; color: #a32020; }
-
-    .hidden { display: none !important; }
-
-    #message {
-      overflow-wrap: anywhere;
-      line-height: 1.5;
-    }
-
-    .order-items {
-      padding-left: 20px;
-      line-height: 1.6;
-    }
-  </style>
 </head>
 
+
 <body>
-  <header>
-    <h1>🧑‍🍳 DNHS MealHub</h1>
-    <p>Staff Dashboard</p>
-    <nav>
-      <a href="index.html">Home</a>
-      <a href="menu.html">Menu</a>
-      <a href="cart.html">Cart</a>
-    </nav>
-  </header>
-
-  <main>
-    <p id="message" role="status"></p>
-
-    <section class="panel" id="loginPanel">
-      <h2>Staff Login</h2>
-      <p class="muted">Sign in using your staff account created in Firebase Authentication.</p>
-
-      <form id="loginForm">
-        <label for="email">Staff email</label>
-        <input id="email" type="email" autocomplete="username" required>
-
-        <label for="password">Password</label>
-        <input id="password" type="password" autocomplete="current-password" required>
-
-        <button class="primary" type="submit" id="loginButton">Sign In</button>
-      </form>
-    </section>
-
-    <div id="dashboard" class="hidden">
-      <section class="panel">
-        <h2>Welcome, Staff!</h2>
-        <p id="staffEmail" class="muted"></p>
-        <button class="danger" id="logoutButton">Sign Out</button>
-      </section>
-
-      <section class="panel">
-        <h2 id="formTitle">Add Food Item</h2>
-
-        <form id="foodForm">
-          <input id="foodId" type="hidden">
-
-          <label for="foodName">Food name</label>
-          <input id="foodName" maxlength="100" required>
-
-          <label for="foodDescription">Description</label>
-          <textarea id="foodDescription" maxlength="300"></textarea>
-
-          <label for="foodCategory">Category</label>
-          <select id="foodCategory">
-            <option>Meals</option>
-            <option>Snacks</option>
-            <option>Drinks</option>
-            <option>Desserts</option>
-            <option>Other</option>
-          </select>
-
-          <label for="foodPrice">Price (₱)</label>
-          <input id="foodPrice" type="number" min="0" step="0.01" required>
-
-          <label for="foodEmoji">Food emoji</label>
-          <input id="foodEmoji" maxlength="10" value="🍽️">
-
-          <label for="foodImage">Image URL (optional)</label>
-          <input id="foodImage" type="url" placeholder="https://example.com/food.jpg">
-
-          <label>
-            <input id="foodAvailable" type="checkbox" checked style="width:auto;margin:0 8px 0 0">
-            Available for ordering
-          </label>
-
-          <p>
-            <button class="primary" type="submit" id="saveFoodButton">Save Food</button>
-            <button class="secondary" type="button" id="cancelEditButton">Clear Form</button>
-          </p>
-        </form>
-      </section>
-
-      <section class="panel">
-        <h2>Manage Menu</h2>
-        <div id="menuList" class="grid">Loading menu...</div>
-      </section>
-
-      <section class="panel">
-        <h2>Customer Orders</h2>
-        <p class="muted">New orders appear here when Firebase is connected.</p>
-        <div id="ordersList" class="grid">Loading orders...</div>
-      </section>
-    </div>
-  </main>
-
-  <script src="https://www.gstatic.com/firebasejs/11.10.0/firebase-app-compat.js"></script>
-  <script src="https://www.gstatic.com/firebasejs/11.10.0/firebase-auth-compat.js"></script>
-  <script src="https://www.gstatic.com/firebasejs/11.10.0/firebase-firestore-compat.js"></script>
-  <script src="firebase.js"></script>
-
-  <script>
-    const messageElement = document.getElementById("message");
-    const loginPanel = document.getElementById("loginPanel");
-    const dashboard = document.getElementById("dashboard");
-    const loginForm = document.getElementById("loginForm");
-    const loginButton = document.getElementById("loginButton");
-    const foodForm = document.getElementById("foodForm");
-    const saveFoodButton = document.getElementById("saveFoodButton");
-    const menuList = document.getElementById("menuList");
-    const ordersList = document.getElementById("ordersList");
-
-    let menuUnsubscribe = null;
-    let ordersUnsubscribe = null;
-    let currentUser = null;
-
-    function showMessage(text, isError = false) {
-      messageElement.textContent = text;
-      messageElement.style.color = isError ? "#b42318" : "#176b43";
-    }
-
-    function makeButton(text, className, onClick) {
-      const button = document.createElement("button");
-      button.type = "button";
-      button.className = className;
-      button.textContent = text;
-      button.addEventListener("click", onClick);
-      return button;
-    }
-
-    function stopListeners() {
-      if (menuUnsubscribe) menuUnsubscribe();
-      if (ordersUnsubscribe) ordersUnsubscribe();
-      menuUnsubscribe = null;
-      ordersUnsubscribe = null;
-    }
-
-    function resetFoodForm() {
-      foodForm.reset();
-      document.getElementById("foodId").value = "";
-      document.getElementById("foodEmoji").value = "🍽️";
-      document.getElementById("foodAvailable").checked = true;
-      document.getElementById("formTitle").textContent = "Add Food Item";
-      saveFoodButton.textContent = "Save Food";
-    }
-
-    loginForm.addEventListener("submit", async event => {
-      event.preventDefault();
-      loginButton.disabled = true;
-      showMessage("Signing in...");
-
-      try {
-        await auth.signInWithEmailAndPassword(
-          document.getElementById("email").value.trim(),
-          document.getElementById("password").value
-        );
-        loginForm.reset();
-        showMessage("Signed in successfully.");
-      } catch (error) {
-        showMessage(error.message || "Unable to sign in.", true);
-      } finally {
-        loginButton.disabled = false;
-      }
-    });
-
-    document.getElementById("logoutButton").addEventListener("click", async () => {
-      try {
-        await auth.signOut();
-      } catch (error) {
-        showMessage(error.message, true);
-      }
-    });
-
-    document.getElementById("cancelEditButton").addEventListener("click", resetFoodForm);
-
-    foodForm.addEventListener("submit", async event => {
-      event.preventDefault();
-
-      if (!currentUser) {
-        showMessage("Please sign in first.", true);
-        return;
-      }
-
-      saveFoodButton.disabled = true;
-
-      const foodId = document.getElementById("foodId").value;
-
-      const item = {
-        name: document.getElementById("foodName").value,
-        description: document.getElementById("foodDescription").value,
-        category: document.getElementById("foodCategory").value,
-        price: Number(document.getElementById("foodPrice").value),
-        emoji: document.getElementById("foodEmoji").value || "🍽️",
-        image: document.getElementById("foodImage").value.trim(),
-        available: document.getElementById("foodAvailable").checked
-      };
-
-      if (foodId) item.id = foodId;
-
-      try {
-        await saveMenuItem(item);
-        resetFoodForm();
-        showMessage("Food item saved!");
-      } catch (error) {
-        showMessage(error.message || "Could not save food item.", true);
-      } finally {
-        saveFoodButton.disabled = false;
-      }
-    });
-
-    function editFood(food) {
-      document.getElementById("foodId").value = food.id;
-      document.getElementById("foodName").value = food.name || "";
-      document.getElementById("foodDescription").value = food.description || "";
-      document.getElementById("foodCategory").value = food.category || "Meals";
-      document.getElementById("foodPrice").value = Number(food.price || 0);
-      document.getElementById("foodEmoji").value = food.emoji || "🍽️";
-      document.getElementById("foodImage").value = food.image || "";
-      document.getElementById("foodAvailable").checked = food.available !== false;
-      document.getElementById("formTitle").textContent = "Edit Food Item";
-      saveFoodButton.textContent = "Update Food";
-      window.scrollTo({ top: 0, behavior: "smooth" });
-    }
-
-    function renderMenu(items) {
-      menuList.replaceChildren();
-
-      if (items.length === 0) {
-        menuList.textContent = "No food items yet. Add your first item above.";
-        return;
-      }
-
-      items.forEach(food => {
-        const card = document.createElement("article");
-        card.className = "food-card";
-
-        const title = document.createElement("h3");
-        title.textContent = (food.emoji || "🍽️") + " " + food.name;
-
-        const description = document.createElement("p");
-        description.textContent = food.description || "No description.";
-
-        const price = document.createElement("p");
-        price.textContent = "₱" + money(food.price);
-
-        const badge = document.createElement("span");
-        badge.className = "badge" + (food.available === false ? " unavailable" : "");
-        badge.textContent = food.available === false ? "Unavailable" : "Available";
-
-        const actions = document.createElement("p");
-        actions.appendChild(makeButton("Edit", "secondary", () => editFood(food)));
-
-        actions.appendChild(makeButton(
-          food.available === false ? "Make Available" : "Mark Unavailable",
-          "secondary",
-          async () => {
-            try {
-              await setMenuAvailability(food.id, food.available === false);
-              showMessage("Availability updated.");
-            } catch (error) {
-              showMessage(error.message, true);
-            }
-          }
-        ));
-
-        actions.appendChild(makeButton("Delete", "danger", async () => {
-          if (!confirm("Delete " + food.name + "? This cannot be undone.")) return;
-
-          try {
-            await deleteMenuItem(food.id);
-            showMessage("Food item deleted.");
-          } catch (error) {
-            showMessage(error.message, true);
-          }
-        }));
-
-        card.append(title, description, price, badge, actions);
-        menuList.appendChild(card);
-      });
-    }
-
-    function renderOrders(snapshot) {
-      ordersList.replaceChildren();
-
-      if (snapshot.empty) {
-        ordersList.textContent = "No customer orders yet.";
-        return;
-      }
-
-      const docs = snapshot.docs.slice().sort((a, b) => {
-        return Number(b.data().createdAtMs || 0) - Number(a.data().createdAtMs || 0);
-      });
-
-      docs.forEach(doc => {
-        const order = doc.data();
-        const card = document.createElement("article");
-        card.className = "order-card";
-
-        const heading = document.createElement("h3");
-        heading.textContent = "Order " + doc.id.slice(0, 8);
-
-        const status = document.createElement("p");
-        status.textContent = "Status: " + (order.status || "Pending");
-
-        const total = document.createElement("p");
-        total.textContent = "Total: ₱" + money(order.total);
-
-        const list = document.createElement("ul");
-        list.className = "order-items";
-
-        (Array.isArray(order.items) ? order.items : []).forEach(item => {
-          const li = document.createElement("li");
-          li.textContent =
-            (item.name || "Food item") + " × " + Number(item.quantity || 1);
-          list.appendChild(li);
-        });
-
-        const statusLabel = document.createElement("label");
-        statusLabel.textContent = "Update status";
-
-        const statusSelect = document.createElement("select");
-        [
-          "Pending",
-          "Preparing",
-          "Ready",
-          "Completed",
-          "Cancelled"
-        ].forEach(value => {
-          const option = document.createElement("option");
-          option.value = value;
-          option.textContent = value;
-          if ((order.status || "Pending") === value) option.selected = true;
-          statusSelect.appendChild(option);
-        });
-
-        const updateButton = makeButton("Update Order", "primary", async () => {
-          updateButton.disabled = true;
-
-          try {
-            await db.collection(ORDERS_COLLECTION).doc(doc.id).update({
-              status: statusSelect.value,
-              updatedAt: firebase.firestore.FieldValue.serverTimestamp()
-            });
-            showMessage("Order status updated.");
-          } catch (error) {
-            showMessage(error.message || "Could not update order.", true);
-          } finally {
-            updateButton.disabled = false;
-          }
-        });
-
-        card.append(
-          heading,
-          status,
-          total,
-          list,
-          statusLabel,
-          statusSelect,
-          updateButton
-        );
-
-        ordersList.appendChild(card);
-      });
-    }
-
-    auth.onAuthStateChanged(user => {
-      stopListeners();
-      currentUser = user;
-
-      loginPanel.classList.toggle("hidden", Boolean(user));
-      dashboard.classList.toggle("hidden", !user);
-
-      if (!user) {
-        menuList.textContent = "";
-        ordersList.textContent = "";
-        return;
-      }
-
-      document.getElementById("staffEmail").textContent =
-        "Signed in as " + (user.email || "Staff");
-
-      menuUnsubscribe = db.collection(MENU_COLLECTION)
-        .onSnapshot(snapshot => {
-          renderMenu(snapshot.docs.map(doc => ({
-            id: doc.id,
-            ...doc.data()
-          })));
-        }, error => {
-          console.error(error);
-          showMessage("Cannot load menu. Check your Firestore rules.", true);
-        });
-
-      ordersUnsubscribe = db.collection(ORDERS_COLLECTION)
-        .onSnapshot(renderOrders, error => {
-          console.error(error);
-          showMessage("Cannot load orders. Check your Firestore rules.", true);
-        });
-    });
-  </script>
+
+
+<header>
+
+
+   <nav class="navbar">
+
+
+       <a
+           href="index.html"
+           class="logo"
+       >
+
+
+           <img
+               src="logo.png"
+               alt="DNHS MealHub Logo"
+           >
+
+
+       </a>
+
+
+
+
+       <div class="nav-links">
+
+
+           <a href="index.html">
+               Home
+           </a>
+
+
+           <a href="menu.html">
+               Menu
+           </a>
+
+
+           <a
+               href="cart.html"
+               class="nav-cart"
+           >
+               🛒 Cart
+           </a>
+
+
+           <a href="staff.html">
+               👤 Staff
+           </a>
+
+
+       </div>
+
+
+   </nav>
+
+
+</header>
+
+
+
+
+<main class="container">
+
+
+
+
+   <div
+       id="loginBox"
+       class="card"
+       style="
+           max-width:500px;
+           margin:50px auto;
+       "
+   >
+
+
+       <h2>
+           👩‍💼 Staff Login
+       </h2>
+
+
+
+
+       <p>
+
+
+           Authorized DepEd staff can manage
+           orders and food availability here.
+
+
+       </p>
+
+
+
+
+       <div class="notice">
+
+
+           Only emails ending in
+           <strong>@gmail.com</strong>
+           are authorized.
+
+
+       </div>
+
+
+
+
+       <br>
+
+
+
+
+       <input
+           id="staffEmail"
+           type="email"
+           placeholder="Enter your email"
+       >
+
+
+       <label for="staffPassword">Staff Password</label>
+       <input
+           type="password"
+           id="staffPassword"
+           placeholder="Enter staff password"
+           required
+>
+
+
+
+
+       <br><br>
+
+
+
+
+       <button
+           class="primary-btn"
+           onclick="loginStaff()"
+       >
+
+
+           Login
+
+
+       </button>
+
+
+   </div>
+
+
+
+
+<div
+   id="dashboard"
+   style="display:none;"
+>
+
+
+ 
+<button
+   type="button"
+   class="logout-btn"
+   onclick="logoutStaff()"
+>
+   ↪ Logout
+</button>
+
+
+
+
+   <div class="page-title">
+
+
+
+
+           <h2>
+               📊 Staff Dashboard
+           </h2>
+
+
+           <p>
+               Manage incoming orders and food availability.
+           </p>
+
+
+       </div>
+
+
+
+
+       <div class="dashboard-grid">
+
+
+
+
+           <div class="card">
+
+
+               <h2>
+                   📦 Incoming Orders
+               </h2>
+
+
+               <div id="orders"></div>
+
+
+           </div>
+
+
+
+
+           <div class="card">
+
+
+               <h2>
+                   🍔 Food Availability
+               </h2>
+
+
+               <p style="color:#637267;">
+
+
+                   Mark food as available or sold out.
+
+
+               </p>
+
+
+<hr>
+
+
+<h3>➕ Add a Menu Item</h3>
+
+
+<form id="foodForm" onsubmit="saveFood(event)">
+   <input type="hidden" id="foodId">
+
+
+   <label for="foodName">Food Name</label>
+   <input id="foodName" type="text" placeholder="e.g. Siomai Rice" required>
+
+
+   <label for="foodPrice">Price (₱)</label>
+   <input id="foodPrice" type="number" min="1" step="0.01" placeholder="e.g. 35" required>
+
+
+   <label for="foodCategory">Category</label>
+   <select id="foodCategory" required>
+       <option value="Meals">Meals</option>
+       <option value="Snacks">Snacks</option>
+       <option value="Drinks">Drinks</option>
+   </select>
+
+
+   <label for="foodEmoji">Food Emoji</label>
+   <input id="foodEmoji" type="text" placeholder="e.g. 🍱" required>
+
+
+   <label for="foodDescription">Description</label>
+   <textarea id="foodDescription" placeholder="Describe the food..." required></textarea>
+
+
+<label for="foodImage">Food Photo Filename</label>
+<input
+   id="foodImage"
+   type="text"
+   placeholder="e.g. siomai-rice.png"
+>
+   <button type="submit" class="primary-btn" id="foodSubmitBtn">
+       Add Food
+   </button>
+
+
+   <button type="button" onclick="resetFoodForm()">
+       Clear Form
+   </button>
+</form>
+
+
+<h3>📝 Custom Menu Items</h3>
+<div id="customFoods"></div>
+
+
+<hr>
+
+
+               <div id="stock"></div>
+
+
+           </div>
+
+
+
+
+       </div>
+
+
+   </div>
+
+
+</main>
+
+
+
+
+<footer>
+
+
+   <div class="footer-title">
+       🍱 DNHS MealHub
+   </div>
+
+
+   Staff Management System
+
+
+</footer>
+
+
+
+
+<script>
+
+
+
+
+function loginStaff() {
+
+
+   const email =
+       document
+           .getElementById(
+               "staffEmail"
+           )
+           .value
+           .trim()
+           .toLowerCase();
+
+
+
+
+   if (
+       !email.endsWith(
+           "@gmail.com"
+       )
+   ) {
+
+
+       alert(
+           "Access denied. Please use an authorized Gmail address."
+       );
+
+
+       return;
+
+
+   }
+
+
+   const password = document.getElementById("staffPassword").value;
+
+
+if (password !== "DNHSSTAFF2026") {
+   alert("Incorrect staff password.");
+   return;
+}
+
+
+   localStorage.setItem(
+       "staffLoggedIn",
+       "true"
+   );
+
+
+
+
+   showDashboard();
+
+
+}
+
+
+
+
+function showDashboard() {
+
+
+   document.getElementById(
+       "loginBox"
+   ).style.display = "none";
+
+
+
+
+   document.getElementById(
+       "dashboard"
+   ).style.display = "block";
+
+
+
+
+   displayOrders();
+
+
+   displayStock();
+
+
+}
+
+
+
+
+function logoutStaff() {
+   localStorage.removeItem("staffLoggedIn");
+
+
+   document.getElementById("dashboard").style.display = "none";
+   document.getElementById("loginBox").style.display = "block";
+}
+
+
+
+
+function displayOrders() {
+
+
+   const orders =
+       JSON.parse(
+           localStorage.getItem("orders")
+       ) || [];
+
+
+
+
+   const container =
+       document.getElementById(
+           "orders"
+       );
+
+
+
+
+   if (orders.length === 0) {
+
+
+       container.innerHTML = `
+
+
+           <div class="notice">
+               No orders yet.
+           </div>
+
+
+       `;
+
+
+       return;
+
+
+   }
+
+
+
+
+   container.innerHTML =
+       orders
+           .slice()
+           .reverse()
+           .map(order => {
+
+
+               const items =
+                   order.items
+                       .map(
+                           item =>
+                               `${item.emoji}
+                               ${item.name}
+                               × ${item.quantity}`
+                       )
+                       .join("<br>");
+
+
+
+
+               return `
+
+
+                   <div class="order-admin">
+
+
+                       <h3>
+                           Order #${order.id}
+                       </h3>
+
+
+
+
+                       <p>
+
+
+                           <strong>
+                               ${order.name}
+                           </strong>
+
+
+                       </p>
+
+
+
+
+                       <p>
+
+
+                           Grade:
+                           ${order.grade}
+
+
+                           <br>
+
+
+                           Section:
+                           ${order.section}
+
+
+                       </p>
+
+
+
+
+                       <p>
+                           ${items}
+                       </p>
+
+
+
+
+                       <p>
+
+
+                           Total:
+
+
+                           <strong>
+                               ₱${order.total}
+                           </strong>
+
+
+                       </p>
+
+
+
+
+                       <p>
+
+
+                           ${
+                               order.method === "delivery"
+
+
+                                   ? "🚚 Delivery"
+
+
+                                   : "🏃 Pickup"
+
+
+                           }
+
+
+                       </p>
+
+
+
+
+                       <p>
+
+
+                           Status:
+
+
+                           <span class="order-status">
+                               ${order.status}
+                           </span>
+
+
+                       </p>
+
+
+
+
+                       <div class="admin-buttons">
+
+
+
+
+                           <button
+                               onclick="
+                                   updateOrder(
+                                       ${order.id},
+                                       'Preparing'
+                                   )
+                               "
+                           >
+                               Preparing
+                           </button>
+
+
+
+
+                           <button
+                               onclick="
+                                   updateOrder(
+                                       ${order.id},
+                                       'Ready'
+                                   )
+                               "
+                           >
+                               Ready
+                           </button>
+
+
+
+
+                           <button
+                               onclick="
+                                   updateOrder(
+                                       ${order.id},
+                                       'Completed'
+                                   )
+                               "
+                           >
+                               Completed
+                           </button>
+
+
+
+
+                       </div>
+
+
+                   </div>
+
+
+               `;
+
+
+           })
+           .join("");
+
+
+}
+
+
+
+
+function updateOrder(id, status) {
+
+
+   const orders =
+       JSON.parse(
+           localStorage.getItem("orders")
+       ) || [];
+
+
+
+
+   const order =
+       orders.find(
+           item =>
+               item.id === id
+       );
+
+
+
+
+   if (order) {
+
+
+       order.status = status;
+
+
+
+
+       localStorage.setItem(
+           "orders",
+           JSON.stringify(orders)
+       );
+
+
+
+
+       displayOrders();
+
+
+   }
+
+
+}
+
+
+
+
+const foods = [];
+
+
+
+
+
+
+function getCustomFoods() {
+   return JSON.parse(localStorage.getItem("customFoods")) || [];
+}
+
+
+function getAllFoods() {
+   return foods.concat(getCustomFoods());
+}
+
+
+function displayStock() {
+   const stock =
+       JSON.parse(localStorage.getItem("foodStock")) || {};
+
+
+   const container = document.getElementById("stock");
+
+
+   container.innerHTML = getAllFoods().map(food => {
+       const available = stock[food.id] !== false;
+
+
+       return `
+           <div class="stock-row">
+               <div>
+                   <span style="font-size:25px;">${food.emoji}</span>
+                   <strong>${food.name}</strong>
+               </div>
+
+
+               <button
+                   class="stock-toggle ${available ? "stock-on" : "stock-off"}"
+                   onclick="toggleStock(${food.id})"
+               >
+                   ${available ? "Available" : "Sold Out"}
+               </button>
+           </div>
+       `;
+   }).join("");
+
+
+   displayCustomFoods();
+}
+
+
+
+
+function saveFood(event) {
+   event.preventDefault();
+
+
+   const id = document.getElementById("foodId").value;
+   const name = document.getElementById("foodName").value.trim();
+   const price = Number(document.getElementById("foodPrice").value);
+   const category = document.getElementById("foodCategory").value;
+   const emoji = document.getElementById("foodEmoji").value.trim();
+   const description = document.getElementById("foodDescription").value.trim();
+   const image = document.getElementById("foodImage").value.trim();
+
+
+   if (!name || !emoji || !description || !Number.isFinite(price) || price <= 0) {
+       alert("Please enter valid details for every field.");
+       return;
+   }
+
+
+   let customFoods = getCustomFoods();
+
+
+   if (id) {
+       customFoods = customFoods.map(food =>
+           food.id === Number(id)
+               ? { ...food, name, price, category, emoji, description, image }
+               : food
+       );
+   } else {
+       const newFood = {
+           id: Date.now(),
+           name,
+           price,
+           category,
+           emoji,
+           description,
+           image
+       };
+
+
+       customFoods.push(newFood);
+   }
+
+
+   localStorage.setItem("customFoods", JSON.stringify(customFoods));
+
+
+   resetFoodForm();
+   displayStock();
+
+
+   alert(id ? "Menu item updated!" : "Menu item added!");
+}
+
+
+function editFood(id) {
+   const food = getCustomFoods().find(item => item.id === id);
+   if (!food) return;
+
+
+   document.getElementById("foodId").value = food.id;
+   document.getElementById("foodName").value = food.name;
+   document.getElementById("foodPrice").value = food.price;
+   document.getElementById("foodCategory").value = food.category;
+   document.getElementById("foodEmoji").value = food.emoji;
+   document.getElementById("foodDescription").value = food.description;
+   document.getElementById("foodImage").value = food.image || "";
+   document.getElementById("foodSubmitBtn").textContent = "Save Changes";
+
+
+   document.getElementById("foodForm").scrollIntoView({
+       behavior: "smooth",
+       block: "center"
+   });
+}
+
+
+function deleteFood(id) {
+   if (!confirm("Delete this menu item?")) return;
+
+
+   const customFoods = getCustomFoods().filter(food => food.id !== id);
+
+
+   localStorage.setItem("customFoods", JSON.stringify(customFoods));
+
+
+   const stock = JSON.parse(localStorage.getItem("foodStock")) || {};
+   delete stock[id];
+   localStorage.setItem("foodStock", JSON.stringify(stock));
+
+
+   displayStock();
+}
+
+
+
+
+function displayCustomFoods() {
+   const container = document.getElementById("customFoods");
+   const customFoods = getCustomFoods();
+   const stock = JSON.parse(localStorage.getItem("foodStock")) || {};
+
+
+   if (customFoods.length === 0) {
+       container.innerHTML = "<p>No custom menu items yet.</p>";
+       return;
+   }
+
+
+   container.innerHTML = customFoods.map(food => {
+       const available = stock[food.id] !== false;
+
+
+       return `
+           <div class="stock-row">
+               <div>
+                   <strong>${food.emoji} ${food.name}</strong>
+                   <p>₱${food.price} · ${food.category}</p>
+               </div>
+
+
+               <div class="admin-buttons">
+                   <button
+                       type="button"
+                       class="stock-toggle ${available ? "stock-on" : "stock-off"}"
+                       onclick="toggleStock(${food.id})"
+                   >
+                       ${available ? "Available" : "Sold Out"}
+                   </button>
+
+
+                   <button type="button" onclick="editFood(${food.id})">
+                       Edit
+                   </button>
+
+
+                   <button type="button" onclick="deleteFood(${food.id})">
+                       Delete
+                   </button>
+               </div>
+           </div>
+       `;
+   }).join("");
+}
+
+
+
+
+function resetFoodForm() {
+   document.getElementById("foodForm").reset();
+   document.getElementById("foodImage").value = "";
+   document.getElementById("foodId").value = "";
+   document.getElementById("foodSubmitBtn").textContent = "Add Food";
+}
+
+
+
+
+function toggleStock(id) {
+
+
+   const stock =
+       JSON.parse(
+           localStorage.getItem(
+               "foodStock"
+           )
+       ) || {};
+
+
+
+
+   stock[id] =
+       stock[id] === false
+           ? true
+           : false;
+
+
+
+
+   localStorage.setItem(
+       "foodStock",
+       JSON.stringify(stock)
+   );
+
+
+
+
+   displayStock();
+
+
+}
+
+
+
+
+if (
+   localStorage.getItem(
+       "staffLoggedIn"
+   ) === "true"
+) {
+
+
+   showDashboard();
+
+
+}
+
+
+</script>
+
+
+<script src="https://www.gstatic.com/firebasejs/11.10.0/firebase-app-compat.js"></script>
+<script src="https://www.gstatic.com/firebasejs/11.10.0/firebase-firestore-compat.js"></script>
+
+
+<script>
+ const firebaseConfig = {
+   apiKey: "AIzaSyA6htOpoLQFKzLwXuHFpADjzymcAKXBRZU",
+   authDomain: "dnhs-mealhub.firebaseapp.com",
+   projectId: "dnhs-mealhub",
+   storageBucket: "dnhs-mealhub.firebasestorage.app",
+   messagingSenderId: "890490482703",
+   appId: "1:890490482703:web:8627555c12525bb216f37a",
+   measurementId: "G-P0SC5F2G4Z"
+ };
+
+
+ firebase.initializeApp(firebaseConfig);
+ const db = firebase.firestore();
+</script>
+
+
 </body>
 </html>
-```
