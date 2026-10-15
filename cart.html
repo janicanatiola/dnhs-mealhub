@@ -576,11 +576,16 @@ function placeOrder() {
 
     orders.push(order);
 
+localStorage.setItem(
+    "orders",
+    JSON.stringify(orders)
+);
 
-    localStorage.setItem(
-        "orders",
-        JSON.stringify(orders)
-    );
+// Remember the latest order for tracking
+localStorage.setItem(
+    "latestOrderId",
+    String(order.id)
+);
 
 
     localStorage.removeItem(

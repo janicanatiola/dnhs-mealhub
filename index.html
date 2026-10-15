@@ -47,8 +47,7 @@
                 Menu
             </a>
 
-            <a href="order.html">📦 Track Order</a>
-
+             <a href="#" onclick="trackLatestOrder(); return false;">📦 Track Order</a>
             <a
                 href="cart.html"
                 class="nav-cart"
@@ -378,6 +377,19 @@
     </div>
 
 </footer>
+
+<script>
+function trackLatestOrder() {
+    const id = localStorage.getItem("latestOrderId");
+
+    if (id) {
+        window.location.href =
+            "order.html?id=" + encodeURIComponent(id);
+    } else {
+        alert("No recent order found. Please place an order first.");
+    }
+}
+</script>
 
 </body>
 </html>
