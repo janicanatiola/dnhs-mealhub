@@ -135,13 +135,15 @@
     </div>
 
 
-    <div
-        id="dashboard"
-        style="display:none;"
-    >
+<div
+    id="dashboard"
+    style="display:none;"
+>
 
+    <button type="button" onclick="logoutStaff()">Logout</button>
 
-        <div class="page-title">
+    <div class="page-title">
+
 
             <h2>
                 📊 Staff Dashboard
@@ -266,6 +268,14 @@ function showDashboard() {
 
     displayStock();
 
+}
+
+
+function logoutStaff() {
+    localStorage.removeItem("staffLoggedIn");
+
+    document.getElementById("dashboard").style.display = "none";
+    document.getElementById("loginBox").style.display = "block";
 }
 
 
