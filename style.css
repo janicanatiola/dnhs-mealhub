@@ -1683,3 +1683,18 @@ footer {
 .logout-btn:active {
     transform: translateY(0);
 }
+
+
+/* Menu food photos */
+.food-image {
+    display: block;
+    width: 100%;
+    height: 150px;
+    object-fit: cover;
+    border-radius: 12px;
+}
+
+/* Keep the food card content organized */
+.food-visual {
+    overflow: hidden;
+}
